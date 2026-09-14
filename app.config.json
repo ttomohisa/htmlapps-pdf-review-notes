@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "PDF Review Notes",
+  "nameJa": "PDF Review Notes",
+  "slug": "pdf-review-notes",
+  "version": "1.0.0",
+  "description": "Review PDF text and regions locally, organize comments, resume work, and export review results without uploading the document.",
+  "descriptionJa": "PDFの文章や図表を端末内でレビューし、コメント整理・作業再開・レビュー結果の書き出しまで行うツールです。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-pdf-review-notes"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}
