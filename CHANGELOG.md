@@ -7,6 +7,8 @@
 - Promoted PDF Review Notes to its first formal release after the v0.9.0 regression cycle.
 - Finalized desktop/mobile review navigation, scroll behavior, contextual shortcut help, local autosave/resume, and Markdown / CSV / standalone HTML report exports.
 - Finalized Japanese/English documentation, release screenshots, favicon/app icon, privacy wording, and offline verification guidance.
+- Bundled the Japanese PDF.js CMaps required by `UniJIS-UCS2-H` / `Adobe-Japan1-UCS2` so PDFs using non-embedded `HeiseiKakuGo-W5` fonts can render Japanese text without a network fallback.
+- Applied the same embedded-CMap path to standalone HTML review reports that include the source PDF.
 
 ### Changed
 

@@ -72,7 +72,7 @@ Those belong to later milestones.
 - Large-file warning threshold: 100 MiB.
 - The original PDF is never modified.
 - No server upload, login, analytics, telemetry, cloud storage, remote font, CDN, or runtime API request.
-- PDF.js main/worker code is embedded at build time.
+- PDF.js main/worker code and the selected Japanese CMap assets are embedded at build time.
 - Review records are autosaved in IndexedDB keyed by the local PDF SHA-256 hash.
 - Session JSON, Markdown, CSV, and standalone HTML reports are created locally and downloaded directly by the browser.
 
@@ -83,12 +83,12 @@ PDF.js is declared through the template dependency contract:
 - Package: `pdfjs-dist`
 - Version: `6.2.108`
 - License: Apache-2.0
-- Embedded assets: `build/pdf.min.mjs`, `build/pdf.worker.min.mjs`
+- Embedded assets: `build/pdf.min.mjs`, `build/pdf.worker.min.mjs`, `cmaps/UniJIS-UCS2-H.bcmap`, `cmaps/Adobe-Japan1-UCS2.bcmap`
 - Update policy: manual
 
 This milestone deliberately pins the same PDF.js baseline already used by Browser Kitty's existing PDF tooling. Updating PDF.js is a separate dependency-review task rather than part of the Text Review feature change.
 
-CMaps, standard-font assets, ICC profiles, and codec WASM are not bundled in v1.0.0. PDFs with unusual non-embedded resources may therefore have rendering limitations. Runtime fallback to a network resource is not permitted.
+v1.0.0 bundles the `UniJIS-UCS2-H` and `Adobe-Japan1-UCS2` CMaps to support common Japanese PDFs whose Adobe-Japan1 fonts are not embedded (for example `HeiseiKakuGo-W5`). Other CMaps, standard-font assets, ICC profiles, and codec WASM are not bundled. PDFs depending on those resources may still have rendering limitations. Runtime fallback to a network resource is not permitted.
 
 ## 7. State model
 
@@ -230,12 +230,13 @@ The app includes small compatibility shims used by Browser Kitty's PDF stack for
 - Preserve all htmlapps-template placeholders and canonical app-icon behavior.
 - `assets/favicon.svg` remains the source for favicon and app brand icon.
 - `dependencies.json` and `dependencies.lock.json` validate.
-- The generated HTML embeds PDF.js main and worker assets.
+- The generated HTML embeds PDF.js main/worker assets and the selected Japanese CMaps.
 - `connect-src 'none'` remains present.
 - No unresolved build placeholder remains.
 - Readable and self-extract release files are generated.
-- PDF.js/Worker loading must work through the embedded asset layer, never CDN.
+- PDF.js/Worker/CMap loading must work through the embedded asset layer, never CDN.
 - Text selection and anchor placement are verified after zoom/page navigation.
+- A PDF using non-embedded `HeiseiKakuGo-W5` with `UniJIS-UCS2-H` renders Japanese text in both the app and an embedded-PDF standalone HTML report.
 - Deletion + Undo is verified.
 - 360–390 px layouts have no application-level horizontal scrolling.
 - Japanese and English UI fit.

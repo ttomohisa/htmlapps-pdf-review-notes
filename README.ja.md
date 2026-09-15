@@ -34,7 +34,7 @@ GitHub Pagesから最初のHTMLを取得した後、選択したPDFとレビュ�
 
 ## 詳細な機能一覧
 
-- **PDF.jsを内包** — 固定版のPDF.js本体とWorkerをビルド時にHTMLへ埋め込み、実行時CDNを使いません。
+- **PDF.jsを内包** — 固定版のPDF.js本体・Workerに加え、非埋め込み日本語フォントで使われる日本語CMapもビルド時にHTMLへ埋め込み、実行時CDNを使いません。
 - **PDF本文を選択** — Canvas表示の上にPDF.js Text Layerを重ね、文章をドラッグ選択できます。
 - **5種類のレビュー** — 修正 / 質問 / 要確認 / 良い / メモ。
 - **PDF座標で位置を保持** — 選択範囲を画面ピクセルではなくPDF座標で持ち、倍率変更や再描画後も同じ箇所へハイライトを戻します。
@@ -92,7 +92,7 @@ v1.0.0は初回正式リリースです。PDF編集全般へ広げず、レビ�
 - HTMLレポートは対応ブラウザでは自動でgzip自己圧縮し、非対応の場合は通常HTMLへ自動フォールバックします。
 - 画像だけのスキャンPDFや図表にも、矩形を使った範囲レビューを付けられます。
 - パスワード保護PDFはこの段階では未対応です。
-- v1.0.0で埋め込むPDF.js資産は本体とWorkerです。特殊な非埋め込みCMap、標準フォント資産、ICC、コーデック資産を必要とするPDFでは表示制限が出る場合があります。外部ネットワークへフォールバックはしません。
+- v1.0.0ではPDF.js本体 / Workerに加えて `UniJIS-UCS2-H` と `Adobe-Japan1-UCS2` のCMapを内包します。`HeiseiKakuGo-W5` などの非埋め込み日本語フォントを使うPDFも端末内だけで描画できます。それ以外の特殊なCMap、標準フォント資産、ICC、コーデック資産を必要とするPDFでは表示制限が残る場合があります。外部ネットワークへフォールバックはしません。
 
 ## v1.0.0までの開発履歴
 
@@ -119,13 +119,13 @@ Windowsでは以下を実行します。
 build-standalone.bat
 ```
 
-初回ビルドではlockファイルで固定した依存tarballを取得し、SHA-256を確認してPDF.js本体/WorkerをHTMLへ埋め込みます。その後、通常版と自己展開版を生成します。
+初回ビルドではlockファイルで固定した依存tarballを取得し、SHA-256を確認してPDF.js本体 / Workerと日本語CMapをHTMLへ埋め込みます。その後、通常版と自己展開版を生成します。
 
 ## 依存ライブラリ
 
 | Library | Version | License | 用途 |
 | --- | ---: | --- | --- |
-| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF解析・描画、Text Layer、PDF座標変換 |
+| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF解析・描画、Text Layer、PDF座標変換、日本語CMap |
 
 詳細は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。
 

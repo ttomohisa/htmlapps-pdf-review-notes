@@ -10,7 +10,7 @@ On Windows:
 build-standalone.bat
 ```
 
-The build must verify the `pdfjs-dist` tarball against `dependencies.lock.json`, embed `build/pdf.min.mjs` and `build/pdf.worker.min.mjs`, and generate:
+The build must verify the `pdfjs-dist` tarball against `dependencies.lock.json`, embed `build/pdf.min.mjs`, `build/pdf.worker.min.mjs`, `cmaps/UniJIS-UCS2-H.bcmap`, and `cmaps/Adobe-Japan1-UCS2.bcmap`, and generate:
 
 - `dist/index.html`
 - `dist/index.self-extract.html`
@@ -28,6 +28,17 @@ The build must verify the `pdfjs-dist` tarball against `dependencies.lock.json`,
 9. Confirm no HTTP/HTTPS request is made after the HTML itself is already available locally.
 10. Confirm CSP contains `connect-src 'none'`.
 11. Confirm the original PDF file is not changed.
+
+## Japanese CMap regression
+
+Use a test PDF that declares a non-embedded `HeiseiKakuGo-W5` CID font with `UniJIS-UCS2-H` encoding. Do not add a private/user document to the repository.
+
+1. Open the PDF in `dist/index.html` with `file://`.
+2. Confirm Japanese headings, table labels, and body text are visible rather than only Latin text/numbers/rules.
+3. Confirm the Japanese text layer is selectable and can be used for a text review.
+4. Export a standalone HTML report with the original PDF included.
+5. Open the report locally and confirm the same Japanese text renders in its embedded PDF preview.
+6. Keep DevTools Network open and confirm no CMap/font request leaves the document; `connect-src 'none'` remains effective.
 
 ## Text-anchor checks
 

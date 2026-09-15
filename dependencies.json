@@ -21,6 +21,18 @@
           "mime": "text/javascript",
           "stripSourceMapComment": true,
           "compression": "auto"
+        },
+        {
+          "key": "cmap-unijis-ucs2-h",
+          "path": "cmaps/UniJIS-UCS2-H.bcmap",
+          "mime": "application/octet-stream",
+          "compression": "auto"
+        },
+        {
+          "key": "cmap-adobe-japan1-ucs2",
+          "path": "cmaps/Adobe-Japan1-UCS2.bcmap",
+          "mime": "application/octet-stream",
+          "compression": "auto"
         }
       ],
       "updates": {

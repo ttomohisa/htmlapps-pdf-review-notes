@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-PDF Review Notes v0.6.0 embeds the following runtime library at build time.
+PDF Review Notes v1.0.0 embeds the following runtime library and selected package assets at build time.
 
 ## PDF.js / pdfjs-dist 6.2.108
 
@@ -11,7 +11,7 @@ PDF Review Notes v0.6.0 embeds the following runtime library at build time.
 - Homepage: https://mozilla.github.io/pdf.js/
 - Source: https://github.com/mozilla/pdf.js
 
-PDF.js is used to parse and render the selected PDF locally, create the selectable text layer, and convert between viewport and PDF coordinates.
+PDF.js is used to parse and render the selected PDF locally, create the selectable text layer, convert between viewport and PDF coordinates, and provide the bundled Japanese CMaps `UniJIS-UCS2-H` and `Adobe-Japan1-UCS2`.
 
 The exact package version and npm tarball hash are pinned in `dependencies.json` and `dependencies.lock.json`.
 

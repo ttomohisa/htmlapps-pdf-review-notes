@@ -34,7 +34,7 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 
 ## Detailed feature list
 
-- **Embedded PDF.js viewer** — PDF.js and its worker are pinned and embedded into the built HTML; no runtime CDN is used.
+- **Embedded PDF.js viewer** — PDF.js, its worker, and the Japanese CMaps used by common non-embedded Adobe-Japan1 fonts are pinned and embedded into the built HTML; no runtime CDN is used.
 - **Selectable PDF text** — Canvas rendering is paired with a PDF.js Text Layer.
 - **Five review types** — Change, Question, Check, Good, and Note.
 - **PDF-coordinate anchors** — Text selection rectangles are stored in PDF coordinates so highlights can be restored after zoom or page re-rendering.
@@ -90,7 +90,7 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 - PDF.js runs from embedded assets; `file://` uses the embedded fake-worker path so it does not depend on a cross-origin worker URL.
 - Image-only scanned PDFs, figures, and charts can be reviewed with Area review rectangles.
 - Password-protected PDFs are not supported in this milestone.
-- Only PDF.js main/worker code is embedded in v1.0.0. Unusual PDFs that depend on non-embedded CMaps, standard-font resources, ICC profiles, or codec assets may have rendering limitations. The app does not fall back to a network resource.
+- PDF.js main/worker code plus `UniJIS-UCS2-H` and `Adobe-Japan1-UCS2` CMaps are embedded in v1.0.0. This covers PDFs such as non-embedded `HeiseiKakuGo-W5` Japanese documents. Other unusual CMaps, standard-font resources, ICC profiles, or codec assets may still have rendering limitations. The app does not fall back to a network resource.
 
 ## Development history
 
@@ -131,13 +131,13 @@ See [APP_SPEC.md](APP_SPEC.md) for the product contract.
 build-standalone.bat
 ```
 
-The first build downloads the exact dependency tarball pinned by the lock file, verifies its SHA-256, embeds the configured PDF.js assets, and generates both standalone HTML variants.
+The first build downloads the exact dependency tarball pinned by the lock file, verifies its SHA-256, embeds the configured PDF.js main/worker and Japanese CMap assets, and generates both standalone HTML variants.
 
 ## Dependencies
 
 | Library | Version | License | Purpose |
 | --- | ---: | --- | --- |
-| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF parsing/rendering, selectable text layer, PDF/view coordinates |
+| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF parsing/rendering, selectable text layer, PDF/view coordinates, bundled Japanese CMaps |
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
