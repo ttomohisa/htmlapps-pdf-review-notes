@@ -48,6 +48,10 @@ It must:
 - Generated HTML reports carry the same favicon as the app.
 - HTML reports are gzip self-compressed automatically when CompressionStream / DecompressionStream are available; export falls back to normal HTML without user action when unavailable or compression fails.
 - Generated HTML reports have no external runtime dependency and provide local Open / Resolved filters.
+- HTML report generation captures one immutable set of source PDF, review contents and anchors, language, filename and export options before asynchronous work starts. It must not mix later edits or another PDF into that report.
+- While HTML generation is pending, disable all report format buttons and export inputs. Close, Escape, backdrop dismissal, or opening another PDF cancels the pending export; late completions/failures cannot download or change newer UI. Release/cancel owned crop renders and file reads when possible. Localized progress/error feedback remains inside the dialog; failures permit retry.
+- Keep the edited basename and options while the same PDF stays open. Opening a new source resets them. Strip known HTML/Markdown/CSV extensions before appending the selected format, sanitize unsafe filename characters, and use a fallback for empty names. This is memory-only, not new persistence.
+- Preserve CSV values exactly: seven columns, UTF-8 BOM, CRLF records, and standard quote escaping. Formula-like text is not rewritten; spreadsheet applications may interpret it, so import untrusted review fields as text.
 - Invalidate stale async work when the source PDF changes.
 - Cancel obsolete render/text-layer tasks during page/source changes.
 - Keep the original PDF unchanged.
@@ -234,7 +238,7 @@ The app includes small compatibility shims used by Browser Kitty's PDF stack for
 - The generated HTML embeds PDF.js main/worker assets and the selected Japanese CMaps.
 - `connect-src 'none'` remains present.
 - No unresolved build placeholder remains.
-- Readable and self-extract release files are generated.
+- Readable and self-extract release files are generated. The default build synchronizes the checked-in `pdf-review-notes.html` download; custom output leaves it alone. Repository checks reject stale root downloads before synchronization, ignoring only the build timestamp.
 - PDF.js/Worker/CMap loading must work through the embedded asset layer, never CDN.
 - Text selection and anchor placement are verified after zoom/page navigation.
 - A PDF using non-embedded `HeiseiKakuGo-W5` with `UniJIS-UCS2-H` renders Japanese text in both the app and an embedded-PDF standalone HTML report.

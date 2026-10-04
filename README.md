@@ -85,6 +85,8 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 
 - Reviews are autosaved in IndexedDB on this device and can be exported/imported as session JSON.
 - Clear saved deletes the current PDF's saved reviews and pauses autosave until you close or replace that PDF. Visible reviews remain available for export; reopen the PDF to start a fresh autosave session.
+- Report export keeps your edited filename while the same PDF stays open and normalizes `.html`, `.md`, and `.csv` extensions. HTML reports use the source, reviews, language, and options captured when you start. Close the dialog or press Esc to cancel a pending report; opening another PDF also cancels it.
+- CSV keeps review text unchanged, including formula-like values. When opening untrusted reviews in a spreadsheet, import the review fields as text.
 - Markdown / CSV contain review results only. HTML reports embed the original PDF by default, with an option to exclude it for a lighter report.
 - Area-review crops can optionally be embedded in the HTML report as data images for quick visual reference.
 - Standalone HTML reports are gzip self-compressed automatically when the browser supports it; otherwise export falls back to normal HTML automatically.

@@ -26,7 +26,7 @@ function harness({ delayedOpen = false, confirmed = true } = {}) {
   }; } }; } };
   const pendingOpen = delayedOpen ? new Promise(resolve => { resolveOpen = () => resolve(db); }) : Promise.resolve(db);
   const state = { generation: 1, file: { name: 'synthetic.pdf' }, sessionKey: 'synthetic-hash', lastSavedAt: '', autosaveTimer: 0, sessionPersistenceDisabled: false };
-  const context = vm.createContext({ state, records, setTimeout, clearTimeout, SESSION_STORE: 'reviewSessions', openSessionDb: () => pendingOpen,
+  const context = vm.createContext({ state, records, setTimeout, clearTimeout, cancelReportExport() {}, els: { exportDialog: { open: false }, includePdf: {}, includeAreaImages: {} }, SESSION_STORE: 'reviewSessions', openSessionDb: () => pendingOpen,
     buildSessionRecord: () => ({ id: state.sessionKey, savedAt: 'now', reviews: [{ comment: 'synthetic secret' }] }),
     updateSessionStatus() {}, hideSelectionToolbar() {}, clearTextSelection() {}, async disposeDocument() {}, renderReviewList() {}, syncFilterUI() {}, updateAreaModeUI() {},
     t: key => key, AppToast: { show() {} }, setStatus() {}, AppConfirm: { ask: async () => confirmed } });

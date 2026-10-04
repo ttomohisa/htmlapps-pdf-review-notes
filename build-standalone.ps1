@@ -1,6 +1,7 @@
 param(
   [switch]$ForceDownload,
   [switch]$SkipSelfExtract,
+  [switch]$CheckReleaseAlias,
   [string]$OutputPath = ""
 )
 
@@ -452,6 +453,15 @@ if ($appConfig.build.PSObject.Properties.Name -contains "sizeBudget" -and $appCo
 }
 
 $outputHash = Get-Sha256FileHex $OutputPath
+if ($CheckReleaseAlias) {
+  if ($OutputPathWasSpecified -or $SkipSelfExtract) { throw "CheckReleaseAlias requires the default complete build." }
+  # Check the committed artifact before a build can silently repair stale bytes.
+  & node --test (Join-Path $Root "tests/release-artifacts.test.cjs")
+  if ($LASTEXITCODE -ne 0) { throw "Release parity failed. Rebuild and commit pdf-review-notes.html." }
+} elseif (-not $OutputPathWasSpecified) {
+  Copy-Item -LiteralPath $OutputPath -Destination (Join-Path $Root "pdf-review-notes.html") -Force
+}
+
 $outputSizeMb = [Math]::Round($readableBytes / 1MB, 2)
 Write-Host ""
 Write-Host "[OK] Standalone HTML: $OutputPath" -ForegroundColor Green
