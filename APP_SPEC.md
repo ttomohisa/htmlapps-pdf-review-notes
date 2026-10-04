@@ -74,6 +74,7 @@ Those belong to later milestones.
 - No server upload, login, analytics, telemetry, cloud storage, remote font, CDN, or runtime API request.
 - PDF.js main/worker code and the selected Japanese CMap assets are embedded at build time.
 - Review records are autosaved in IndexedDB keyed by the local PDF SHA-256 hash.
+- Clear saved deletes the current PDF's record and pauses autosave for that open document, including queued autosaves and page-close persistence. Visible reviews remain available for export; opening another PDF or reopening this PDF resumes normal autosave. Pending database writes must reject a stale source generation before creating a transaction.
 - Session JSON, Markdown, CSV, and standalone HTML reports are created locally and downloaded directly by the browser.
 
 ## 6. Embedded dependency

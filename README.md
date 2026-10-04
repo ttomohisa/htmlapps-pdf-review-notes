@@ -84,6 +84,7 @@ The GitHub Pages version still requires the initial HTML request. For disconnect
 v1.0.0 is the first formal release. The feature set is intentionally focused on reviewing, resuming, and exporting review notes without turning the app into a general PDF editor.
 
 - Reviews are autosaved in IndexedDB on this device and can be exported/imported as session JSON.
+- Clear saved deletes the current PDF's saved reviews and pauses autosave until you close or replace that PDF. Visible reviews remain available for export; reopen the PDF to start a fresh autosave session.
 - Markdown / CSV contain review results only. HTML reports embed the original PDF by default, with an option to exclude it for a lighter report.
 - Area-review crops can optionally be embedded in the HTML report as data images for quick visual reference.
 - Standalone HTML reports are gzip self-compressed automatically when the browser supports it; otherwise export falls back to normal HTML automatically.
