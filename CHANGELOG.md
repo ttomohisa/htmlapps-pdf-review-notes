@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Keep HTML reports consistent with the PDF, reviews, options, filename, and language captured at export start. Cancel pending work on close, Escape, backdrop dismissal, and source replacement; prevent duplicate exports and surface retryable localized errors.
+- Preserve edited report filenames for the open PDF and normalize HTML, Markdown, and CSV extensions without changing CSV cell values.
+- Add deferred export regressions and build-time root-download parity checks; synchronize the downloadable HTML from the default build.
+
 - Keep saved-review deletion effective when queued autosave or page-close persistence runs. The visible reviews remain available for export while autosave is paused for the current open PDF.
 - Reject pending writes from a previous source after its PDF is replaced, and describe deletion/autosave behavior in Japanese and English.
 

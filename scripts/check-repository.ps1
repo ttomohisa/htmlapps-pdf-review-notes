@@ -229,10 +229,13 @@ if ([string]::IsNullOrWhiteSpace([string]$app.name)) { throw "app.config.json: n
 if ([string]::IsNullOrWhiteSpace([string]$app.slug)) { throw "app.config.json: slug is required" }
 if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json: version is required" }
 
-$buildArguments = @{}
+$buildArguments = @{ CheckReleaseAlias = $true }
 if ($ForceDownload) { $buildArguments.ForceDownload = $true }
 & (Join-Path $Root "build-standalone.ps1") @buildArguments
 
+$testPaths = @(Get-ChildItem -LiteralPath (Join-Path $Root "tests") -Filter "*.test.cjs" | ForEach-Object { $_.FullName })
+& node --test @testPaths
+if ($LASTEXITCODE -ne 0) { throw "PDF Review Notes regression tests failed." }
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
 
 # WebRTC readiness DataChannel regression
