@@ -238,7 +238,7 @@ The app includes small compatibility shims used by Browser Kitty's PDF stack for
 - The generated HTML embeds PDF.js main/worker assets and the selected Japanese CMaps.
 - `connect-src 'none'` remains present.
 - No unresolved build placeholder remains.
-- Readable and self-extract release files are generated. The default build synchronizes the checked-in `pdf-review-notes.html` download; custom output leaves it alone. Repository checks reject stale root downloads before synchronization, ignoring only the build timestamp.
+- Readable and self-extract release files are generated. The default build synchronizes the checked-in `pdf-review-notes.html` download; custom output leaves it alone. Repository checks reject stale root downloads before synchronization, ignoring only the build timestamp and gzip OS header byte (compressed data and metadata remain exact).
 - PDF.js/Worker/CMap loading must work through the embedded asset layer, never CDN.
 - Text selection and anchor placement are verified after zoom/page navigation.
 - A PDF using non-embedded `HeiseiKakuGo-W5` with `UniJIS-UCS2-H` renders Japanese text in both the app and an embedded-PDF standalone HTML report.
