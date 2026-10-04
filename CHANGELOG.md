@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Keep saved-review deletion effective when queued autosave or page-close persistence runs. The visible reviews remain available for export while autosave is paused for the current open PDF.
+- Reject pending writes from a previous source after its PDF is replaced, and describe deletion/autosave behavior in Japanese and English.
+
 ## [1.0.0] - 2026-09-14
 
 ### Release

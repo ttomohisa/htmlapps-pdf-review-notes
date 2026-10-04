@@ -33,6 +33,8 @@ If an app uses `components/webrtc-qr-pairing.html`, treat the paired browser as 
 
 ## Input files
 
+PDF Review Notes stores quotes and comments in this device's IndexedDB. **Clear saved** deletes the current PDF's saved record and pauses its autosave until another PDF is opened (or the same PDF is reopened). Visible reviews remain in memory for explicit export. Pending writes are checked against the source generation before starting a database transaction, and page-close persistence respects the deletion choice.
+
 Applications created from this template may parse untrusted local files. Implementations should:
 
 - Validate type, size, and structure before expensive processing.
