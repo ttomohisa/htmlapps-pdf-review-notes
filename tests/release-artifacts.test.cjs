@@ -26,7 +26,8 @@ function normalize(html) {
    // Current builder: fixed gzip envelope, with only the existing OS marker variation.
    assert.ok(bytes.length>=18,'complete gzip member');
    assert.deepEqual(bytes.subarray(0,9),Buffer.from([31,139,8,0,0,0,0,0,0]),'fixed gzip header');
-   assert.ok([0,3,255].includes(bytes[9]),'recognized gzip OS marker');
+   // zlib/zlib-ng use OS_CODE 10 on current Windows; older .NET used 0.
+   assert.ok([0,3,10,255].includes(bytes[9]),`recognized gzip OS marker: ${bytes[9]}`);
    const body=bytes.subarray(10,-8),decoded=zlib.inflateRawSync(body,{info:true,maxOutputLength:Math.max(1,entry.bytes)});
    assert.equal(decoded.engine.bytesWritten,body.length,'one complete deflate stream without padding or extra members');
    const raw=decoded.buffer;
@@ -63,3 +64,4 @@ test('all fixed gzip header bytes, truncated streams and corrupt trailers are re
 test('trailing padding and additional gzip members cannot hide inside valid decoded content',()=>{for(const extra of [Buffer.from([0]),zlib.gzipSync(Buffer.alloc(0)),zlib.gzipSync(Buffer.from('extra'))])assert.throws(()=>normalize(mutateFixture((a,m)=>{const b=Buffer.concat([Buffer.from(a.base64,'base64'),extra]);a.base64=b.toString('base64');a.storedBytes=m.storedBytes=b.length}))) });
 test('false compressed lengths, decoded lengths, hashes and mismatched identities are rejected',()=>{for(const change of [(a)=>a.storedBytes++,(a,m)=>m.storedBytes++,(a)=>a.originalBytes++,(a,m)=>m.bytes++,(a,m)=>m.sha256='0'.repeat(64),(a,m)=>m.mime='text/plain',(a,m)=>m.compression='none',(a,m)=>m.key='other',(a,m,b)=>b.dependencies.synthetic.version='2.0.0',(a,m,b,mf)=>mf.dependencies[0].id='other'])assert.throws(()=>normalize(mutateFixture(change)))});
 test('changed decoded asset bytes remain different even with internally consistent rewritten metadata',()=>{const changed=mutateFixture((a,m)=>{const raw=Buffer.from('different source bytes'),encoded=zlib.gzipSync(raw,{level:6});a.base64=encoded.toString('base64');a.originalBytes=m.bytes=raw.length;a.storedBytes=m.storedBytes=encoded.length;m.sha256=require('node:crypto').createHash('sha256').update(raw).digest('hex')});assert.notEqual(normalize(changed),normalize(fixtureHtml()));for(const change of [(a,m)=>m.path='other.js',(a,m,b,mf)=>mf.dependencies[0].package=b.dependencies.synthetic.package='other-package',(a,m,b)=>b.extra='unexpected'])assert.notEqual(normalize(mutateFixture(change)),normalize(fixtureHtml()))});
+test('current Windows zlib and zlib-ng OS marker 10 is accepted without changing content',()=>{const html=mutateFixture(a=>{const b=Buffer.from(a.base64,'base64');b[9]=10;a.base64=b.toString('base64')});assert.equal(normalize(html),normalize(fixtureHtml()))});
