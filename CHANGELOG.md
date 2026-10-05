@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Compare generated downloads across compressor/runtime versions using strict decoded-content parity: validate each gzip envelope, full asset bytes/hash and both metadata copies before normalizing only its encoding and stored size. Keep corruption, stale runtime/config/assets, and exact self-extract regression checks.
+
+- Add localized Previous review / Next review controls beside the PDF viewer, following the existing status/type filters and Page/Added order. Show matching position/count, stop at the ends, and keep the controls in the mobile PDF destination. Report exports continue to include all reviews.
+- Keep review selection and navigation controls in sync after review/filter/session changes and manual page navigation; normalize the page field even when the effective page is unchanged. Preserve add/edit drafts by ignoring navigation while the review dialog is open.
+- Reject delayed saved-session reads after a PDF or review-workspace replacement, without changing the saved-session schema or ordinary restore behavior.
+- Scope Delete/Undo to its source and review session, and protect viewer success, errors, loading cleanup, and deferred highlight scrolling from stale render requests.
+- Keep global viewer shortcuts out of selects, other interactive controls, dialogs, IME composition, and already-handled events. Add focused source regressions with mocked PDF/DOM boundaries; these do not replace browser, real-PDF, native keyboard, or visual/mobile verification.
+
 - Keep HTML reports consistent with the PDF, reviews, options, filename, and language captured at export start. Cancel pending work on close, Escape, backdrop dismissal, and source replacement; prevent duplicate exports and surface retryable localized errors.
 - Preserve edited report filenames for the open PDF and normalize HTML, Markdown, and CSV extensions without changing CSV cell values.
 - Add deferred export regressions and build-time root-download parity checks; synchronize the downloadable HTML from the default build.

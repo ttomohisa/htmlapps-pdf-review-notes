@@ -40,10 +40,12 @@ It must:
 - Store each review in memory with page, exact quote, PDF-space rectangles, type, comment, timestamps, and `open` as the initial status.
 - Re-render anchored highlights from PDF coordinates after page/zoom changes.
 - Show a review list and navigate from a review item back to its page and anchored location.
+- Provide Previous review / Next review controls beside the PDF viewer, using the current status/type filters and Page/Added order without wrapping.
 - Let the user delete a review and offer Undo through the canonical template toast.
 - Review state is identified by a SHA-256 hash of the PDF, autosaved to IndexedDB, and restored when the same PDF is reopened.
 - Review session JSON can be exported/imported for backup and resume.
 - Review results can be exported as Markdown, UTF-8 CSV, or standalone HTML after confirming counts and editing the output file name.
+- Report exports include all reviews regardless of the review list's filters; filtered navigation does not change export scope.
 - HTML reports embed the original PDF by default so the report is usable as a single received file. The report uses the same bundled PDF.js canvas rendering approach as the app, not the browser-native PDF viewer. Review cards navigate to the saved page/anchor. Users may opt out for a lighter report. Area-review crops remain independently optional.
 - Generated HTML reports carry the same favicon as the app.
 - HTML reports are gzip self-compressed automatically when CompressionStream / DecompressionStream are available; export falls back to normal HTML without user action when unavailable or compression fails.
@@ -104,7 +106,9 @@ Explicit phases:
 - `ready`
 - `error`
 
-A new source increments `generation`. Every async continuation checks that generation before changing the UI.
+A new source increments `generation`. Every async continuation checks that generation before changing the UI. Viewer renders also track the current document/page request, including repeated renders of the same page: only the owned request may commit success, show an error, clear loading state, or perform deferred highlight scrolling.
+
+Replacing the source or applying a replacement review session invalidates earlier Undo actions, including retained callbacks. A saved-session database read may apply its record only while its source generation, PDF, session key, and review workspace are still current; a late record cannot overwrite another PDF or a newer imported/restored session. Review navigation state is derived from the current review list, filters, order, and active review id rather than stored in the session schema.
 
 The ready state also contains:
 
@@ -165,7 +169,7 @@ Display labels switch between Japanese and English. User-entered comments are ne
 
 ## 10. Review deletion
 
-Deletion is immediately applied and is reversible through the template Undo toast. No modal confirmation is used for single-item deletion.
+Deletion is immediately applied and is reversible through the template Undo toast. Undo restores the review's fields and original list position within the same source/session. Replacing the source or review session clears the obsolete toast action and prevents its callback from restoring an old review into the new workspace. No modal confirmation is used for single-item deletion.
 
 Bulk deletion is not part of v1.0.0.
 
@@ -186,6 +190,17 @@ Selecting a review:
 4. emphasizes the anchored highlight,
 5. scrolls the highlight into view.
 
+### Filtered review navigation
+
+- Previous review / Next review controls stay next to the viewer, separate from previous/next PDF page controls, with localized labels and a current-position/matching-count marker.
+- Use the same filtered list as Review Notes: status and type filters compose, then Page order or Added order applies. Navigation does not mutate filters, review data, timestamps, anchors, or source list order.
+- Selecting a matching review follows the existing review-card page/highlight navigation and keeps the mobile PDF destination active.
+- Do not wrap: Previous is disabled at the first match and Next at the last. When no matching review is active, show the matching count, disable Previous, and let Next select the first match. With no matches, disable both.
+- Recompute the marker and controls after review edits, status changes, deletion/Undo, filters/order changes, session restore/import, and source replacement. If the active review no longer matches, do not silently advance; the next Next action starts at the first match.
+- Manual page navigation clears the active review and synchronizes the card, highlight, and navigation state. Normalize the page input to the effective page even when clamping or invalid input leaves the page unchanged; an unchanged page does not need another render.
+- Ignore page/review navigation while the add/edit review dialog is open so the captured text/area, comment, and edit draft remain intact.
+- Add no global review-navigation shortcuts and leave saved UI preferences and export scope unchanged.
+
 ## 12. Smartphone model
 
 v1.0.0 keeps the two-destination mobile model:
@@ -194,6 +209,8 @@ v1.0.0 keeps the two-destination mobile model:
 - **Reviews N**
 
 Only one destination is shown at a time under 820 px.
+
+Filtered review navigation remains beside the PDF viewer within the PDF destination.
 
 The text-selection type chooser is fixed above the bottom destination bar so it does not compete with native selection handles or disappear below the viewport.
 
@@ -207,6 +224,7 @@ Dialogs become bottom sheets on narrow screens. Keyboard appearance must not mak
 - Text Layer is re-created for the current page.
 - Fit modes re-render after a debounced viewer resize.
 - Source/page changes cancel obsolete canvas/text tasks when possible.
+- Late success, failure, and cleanup from an obsolete source/page/render request cannot overwrite the current viewer, its loading state, or its error feedback. A failure owned by the current request still shows a localized error.
 - Password-protected PDFs show a localized unsupported message in this milestone.
 
 ## 14. Accessibility
@@ -218,7 +236,7 @@ Dialogs become bottom sheets on narrow screens. Keyboard appearance must not mak
 - Review cards are keyboard activatable.
 - Text selection review toolbar has a toolbar role.
 - `Esc` clears a text selection and closes native dialogs through their normal cancel behavior.
-- Arrow left/right and PageUp/PageDown move between pages when focus is not in an input/button/textarea.
+- Arrow left/right and PageUp/PageDown move between pages when focus is outside interactive controls and dialogs. Global viewer shortcuts ignore input, textarea, button, select, editable content, and other interactive targets, open dialogs, IME composition, and events already handled with `preventDefault()`.
 - Desktop viewer exposes shortcut hints for **Shift + drag Area Review** and **Ctrl + wheel zoom**; these shortcuts are not hidden-only interactions.
 - Status filters synchronize their visual state with `aria-pressed`.
 - Autosave UI describes the user-visible state without exposing internal SHA-256 identifiers.
@@ -238,7 +256,7 @@ The app includes small compatibility shims used by Browser Kitty's PDF stack for
 - The generated HTML embeds PDF.js main/worker assets and the selected Japanese CMaps.
 - `connect-src 'none'` remains present.
 - No unresolved build placeholder remains.
-- Readable and self-extract release files are generated. The default build synchronizes the checked-in `pdf-review-notes.html` download; custom output leaves it alone. Repository checks reject stale root downloads before synchronization, ignoring only the build timestamp and gzip OS header byte (compressed data and metadata remain exact).
+- Readable and self-extract release files are generated. The default build synchronizes the checked-in `pdf-review-notes.html` download; custom output leaves it alone. Repository checks reject stale root downloads before synchronization, ignoring the build timestamp and proven differences in gzip encoding. Before comparing a deterministic gzip representation, verify canonical Base64, the fixed header (with the allowed OS-byte variation), one complete DEFLATE member, CRC/ISIZE, full decoded bytes/SHA-256, and both manifest/bundle length and identity metadata. Only validated gzip payloads and their stored-byte counts are normalized; other runtime, configuration, asset and metadata differences remain detectable. Self-extract restoration remains byte-exact.
 - PDF.js/Worker/CMap loading must work through the embedded asset layer, never CDN.
 - Text selection and anchor placement are verified after zoom/page navigation.
 - A PDF using non-embedded `HeiseiKakuGo-W5` with `UniJIS-UCS2-H` renders Japanese text in both the app and an embedded-PDF standalone HTML report.
@@ -247,6 +265,9 @@ The app includes small compatibility shims used by Browser Kitty's PDF stack for
 - Japanese and English UI fit.
 - README, changelog, third-party notice, and offline verification describe v1.0.0.
 - Markdown and CSV exports are verified for text/area reviews, commas/quotes/newlines, Japanese text, and editable output filenames.
+- Focused source tests with mocked PDF/DOM boundaries cover filtered review order and endpoints, count/selection updates, modal draft preservation, page-input normalization, source/session-scoped Undo, render request ownership, and shortcut exclusions. Preserve the existing persistence/export regressions, all-review export scope, exact CSV contract, original PDF bytes, dependency versions, and privacy policy.
+
+Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft PR CI do not establish real-PDF rendering, browser/native keyboard behavior, visual/mobile layout, or direct `file://` behavior. Report those checks separately and do not mark them verified unless actually exercised.
 
 ## 17. Planned milestones
 

@@ -26,6 +26,7 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 - Export review results as Markdown, UTF-8 CSV, or standalone HTML
 - Export/import session JSON for backup and resume
 - Filter reviews by status and type, and sort them by page or creation order
+- Step through matching reviews with Previous review / Next review beside the PDF viewer
 - PDF.js rendering stays fully local and pinned
 - **Shift + drag** starts a temporary rectangular Area Review on desktop
 - **Ctrl + wheel** zooms the PDF around the pointer position
@@ -39,8 +40,9 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 - **Five review types** — Change, Question, Check, Good, and Note.
 - **PDF-coordinate anchors** — Text selection rectangles are stored in PDF coordinates so highlights can be restored after zoom or page re-rendering.
 - **Review list navigation** — Select a review to jump back to its page and anchored passage.
+- **Filtered review navigation** — Previous review / Next review follows the current status/type filters and Page/Added order, with a localized position/count beside the viewer. It stops at either end and remains available in the mobile PDF view.
 - **Per-PDF autosave** — Reviews are restored automatically when the same PDF is reopened.
-- **Delete with Undo** — Single-review deletion is immediately reversible through the app toast.
+- **Delete with Undo** — Single-review deletion is immediately reversible through the app toast while the same PDF/session stays open. Opening another PDF or replacing the session clears the old Undo action.
 - **Standalone HTML report** — Export a self-contained review result with local Open / Resolved filters. The original PDF is embedded by default and rendered with the same bundled PDF.js viewer style as the app; review cards jump to their saved PDF locations, and the recipient can save the source PDF. Users can opt out for a lighter file.
 - **Consistent page controls** — Previous/next, page input, zoom, fit width, and fit page are handled by the app rather than browser-specific PDF URL fragments.
 - **Desktop and smartphone layouts** — Desktop uses a PDF + review split view; mobile uses PDF / Reviews bottom destinations.
@@ -56,7 +58,10 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 4. Choose **Change / Question / Check / Good / Note** from the review-type menu.
 5. Enter a comment and add the review.
 6. Select a Review Notes item to return to its anchored passage.
-7. Delete an item when needed; use **Undo** from the toast to restore it.
+7. Set status/type filters and the review order, then use **Previous review / Next review** beside the PDF to step through matching items. Without an active match, **Next review** starts at the first one; the controls do not wrap.
+8. Delete an item when needed; use **Undo** from the toast to restore it within the same PDF/session.
+
+Changing pages manually clears the active review, and the page field shows the actual page after an out-of-range entry. Page/review navigation is ignored while the add/edit review dialog is open, preserving the draft. Viewer keyboard shortcuts leave focused controls, dialogs, and IME composition alone.
 
 ## Input limits
 
@@ -87,6 +92,7 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 - Clear saved deletes the current PDF's saved reviews and pauses autosave until you close or replace that PDF. Visible reviews remain available for export; reopen the PDF to start a fresh autosave session.
 - Report export keeps your edited filename while the same PDF stays open and normalizes `.html`, `.md`, and `.csv` extensions. HTML reports use the source, reviews, language, and options captured when you start. Close the dialog or press Esc to cancel a pending report; opening another PDF also cancels it.
 - CSV keeps review text unchanged, including formula-like values. When opening untrusted reviews in a spreadsheet, import the review fields as text.
+- Markdown, CSV, and HTML exports include all reviews. List filters limit the review list and Previous/Next review navigation, not the exported reviews.
 - Markdown / CSV contain review results only. HTML reports embed the original PDF by default, with an option to exclude it for a lighter report.
 - Area-review crops can optionally be embedded in the HTML report as data images for quick visual reference.
 - Standalone HTML reports are gzip self-compressed automatically when the browser supports it; otherwise export falls back to normal HTML automatically.
