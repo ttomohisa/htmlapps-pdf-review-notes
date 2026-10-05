@@ -29,7 +29,7 @@ function harness({ delayedOpen = false, confirmed = true } = {}) {
   const context = vm.createContext({ state, records, setTimeout, clearTimeout, cancelReportExport() {}, els: { exportDialog: { open: false }, includePdf: {}, includeAreaImages: {} }, SESSION_STORE: 'reviewSessions', openSessionDb: () => pendingOpen,
     buildSessionRecord: () => ({ id: state.sessionKey, savedAt: 'now', reviews: [{ comment: 'synthetic secret' }] }),
     updateSessionStatus() {}, hideSelectionToolbar() {}, clearTextSelection() {}, async disposeDocument() {}, renderReviewList() {}, syncFilterUI() {}, updateAreaModeUI() {},
-    t: key => key, AppToast: { show() {} }, setStatus() {}, AppConfirm: { ask: async () => confirmed } });
+    t: key => key, AppToast: { show() {}, hide() {} }, setStatus() {}, AppConfirm: { ask: async () => confirmed } });
   for (const name of ['idbPut', 'idbDelete', 'scheduleAutosave', 'persistSession', 'clearSavedSessionRecord', 'beginSourceChange']) vm.runInContext(productionFunction(name), context);
   return { context, state, records, resolveOpen, putTransactions: () => putTransactions };
 }
