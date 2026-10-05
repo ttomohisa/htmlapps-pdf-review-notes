@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Compare generated downloads across compressor/runtime versions using strict decoded-content parity: validate each gzip envelope, full asset bytes/hash and both metadata copies before normalizing only its encoding and stored size. Keep corruption, stale runtime/config/assets, and exact self-extract regression checks.
+
 - Add localized Previous review / Next review controls beside the PDF viewer, following the existing status/type filters and Page/Added order. Show matching position/count, stop at the ends, and keep the controls in the mobile PDF destination. Report exports continue to include all reviews.
 - Keep review selection and navigation controls in sync after review/filter/session changes and manual page navigation; normalize the page field even when the effective page is unchanged. Preserve add/edit drafts by ignoring navigation while the review dialog is open.
 - Reject delayed saved-session reads after a PDF or review-workspace replacement, without changing the saved-session schema or ordinary restore behavior.
