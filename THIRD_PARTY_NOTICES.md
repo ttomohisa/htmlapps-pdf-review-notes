@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-PDF Review Notes v1.0.0 embeds the following runtime library and selected package assets at build time.
+PDF Review Notes v1.0.1 embeds the following runtime library and selected package assets at build time.
 
 ## PDF.js / pdfjs-dist 6.2.108
 

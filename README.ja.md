@@ -8,7 +8,7 @@
 
 PDF Review Notes は、PDFの文章を選択してレビューコメントを付け、原本PDFを変更・アップロードせずに指摘を整理するブラウザーツールです。
 
-**現在の正式版: v1.0.0。**
+**現在の正式版: v1.0.1。**
 
 ## デモ
 
@@ -18,7 +18,7 @@ GitHub Pagesから最初のHTMLを取得した後、選択したPDFとレビュ�
 
 [![PDF Review Notes スクリーンショット](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-pdf-review-notes/)
 
-## v1.0.0でできること
+## v1.0.1でできること
 
 - テキスト / 矩形レビューの追加・編集・削除・再確認
 - レビューごとの 未対応 / 解決済み 管理
@@ -103,7 +103,7 @@ v1.0.0は初回正式リリースです。PDF編集全般へ広げず、レビ�
 - パスワード保護PDFはこの段階では未対応です。
 - v1.0.0ではPDF.js本体 / Workerに加えて `UniJIS-UCS2-H` と `Adobe-Japan1-UCS2` のCMapを内包します。`HeiseiKakuGo-W5` などの非埋め込み日本語フォントを使うPDFも端末内だけで描画できます。それ以外の特殊なCMap、標準フォント資産、ICC、コーデック資産を必要とするPDFでは表示制限が残る場合があります。外部ネットワークへフォールバックはしません。
 
-## v1.0.0までの開発履歴
+## 開発履歴
 
 | Version | Milestone |
 | --- | --- |
@@ -116,7 +116,8 @@ v1.0.0は初回正式リリースです。PDF編集全般へ広げず、レビ�
 | v0.7.0 | Standalone HTML Review Report |
 | v0.8.0 | UI / UX Finish |
 | v0.9.0 | Release Candidate / Regression |
-| **v1.0.0** | **正式リリース — 現在** |
+| v1.0.0 | 正式リリース |
+| **v1.0.1** | **ヘッダーのEN / JA切り替え表記を統一 — 現在** |
 
 詳細は [APP_SPEC.md](APP_SPEC.md) を参照してください。
 

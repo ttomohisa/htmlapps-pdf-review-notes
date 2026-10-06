@@ -12,5 +12,5 @@ PDF Review Notes — development entry
 9. Run build-standalone.bat on Windows and review dist/build-size-report.json.
 10. Test both generated HTML files with the network disabled, including direct file:// opening and smartphone help/dialog scrolling.
 
-Current release: v1.0.0 — Formal Release.
+Current release: v1.0.1 — Header consistency.
 Next: post-release maintenance and user-driven improvements.

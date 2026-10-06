@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## [1.0.1] - 2026-10-06
+
+- Standardize the header language button to EN / JA, with localized accessible names and tooltips. Preserve the existing localized Help and Fully local processing / 完全ローカル処理 badge.
+- Synchronize v1.0.1 metadata and standalone downloads.
+
 - Compare generated downloads across compressor/runtime versions using strict decoded-content parity: validate each gzip envelope, full asset bytes/hash and both metadata copies before normalizing only its encoding and stored size. Keep corruption, stale runtime/config/assets, and exact self-extract regression checks.
 
 - Add localized Previous review / Next review controls beside the PDF viewer, following the existing status/type filters and Page/Added order. Show matching position/count, stop at the ends, and keep the controls in the mobile PDF destination. Report exports continue to include all reviews.

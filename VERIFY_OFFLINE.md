@@ -1,6 +1,6 @@
 # Offline / Local Processing Verification
 
-PDF Review Notes v1.0.0 is designed to keep the selected PDF and review comments on the device.
+PDF Review Notes v1.0.1 is designed to keep the selected PDF and review comments on the device.
 
 ## Build
 
@@ -60,4 +60,4 @@ At 360–390 px width:
 
 ## Notes
 
-v1.0.0 review data is autosaved locally in IndexedDB by PDF SHA-256. Session JSON, Markdown, CSV, and standalone HTML reports are generated locally; no export requires network access.
+v1.0.1 review data is autosaved locally in IndexedDB by PDF SHA-256. Session JSON, Markdown, CSV, and standalone HTML reports are generated locally; no export requires network access.
