@@ -3,8 +3,8 @@
 ## 1. Product identity
 
 - **Name:** PDF Review Notes
-- **Version:** 1.0.0
-- **Current release:** v1.0.0 — Formal Release
+- **Version:** 1.0.1
+- **Current release:** v1.0.1 — Header consistency
 - **Purpose:** Open a local PDF, review selectable text or rectangular regions, manage structured comments, and return to anchored locations without modifying or uploading the original PDF.
 - **Primary users:** People reviewing specifications, reports, manuscripts, papers, proposals, manuals, and other PDF documents.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
@@ -22,9 +22,9 @@ The v1.0 product flow remains:
 5. Resume the review locally.
 6. Export Markdown, CSV, session JSON, or a standalone HTML review report.
 
-## 3. Current release — v1.0.0 Formal Release
+## 3. Current release — v1.0.1
 
-v1.0.0 is the first formal release. It preserves the completed review workflow and focuses on a stable local-first experience across desktop/mobile, Japanese/English, file:// use, session resume, and review exports.
+v1.0.0 was the first formal release. v1.0.1 standardizes EN / JA target-language buttons and localized accessible language labels while preserving the existing local-processing badge. It preserves the completed review workflow and focuses on a stable local-first experience across desktop/mobile, Japanese/English, file:// use, session resume, and review exports.
 
 It must:
 
@@ -263,7 +263,7 @@ The app includes small compatibility shims used by Browser Kitty's PDF stack for
 - Deletion + Undo is verified.
 - 360–390 px layouts have no application-level horizontal scrolling.
 - Japanese and English UI fit.
-- README, changelog, third-party notice, and offline verification describe v1.0.0.
+- README, changelog, third-party notice, and offline verification describe the current release.
 - Markdown and CSV exports are verified for text/area reviews, commas/quotes/newlines, Japanese text, and editable output filenames.
 - Focused source tests with mocked PDF/DOM boundaries cover filtered review order and endpoints, count/selection updates, modal draft preservation, page-input normalization, source/session-scoped Undo, render request ownership, and shortcut exclusions. Preserve the existing persistence/export regressions, all-review export scope, exact CSV contract, original PDF bytes, dependency versions, and privacy policy.
 
@@ -280,4 +280,5 @@ Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft P
 - **v0.7.0:** Standalone HTML Review Report.
 - **v0.8.0:** UI / UX Finish.
 - **v0.9.0:** Release Candidate / Regression.
-- **v1.0.0:** Final documentation, screenshots, compatibility regression, and formal release. **Current.**
+- **v1.0.0:** Final documentation, screenshots, compatibility regression, and formal release.
+- **v1.0.1:** Consistent bilingual header controls. **Current.**

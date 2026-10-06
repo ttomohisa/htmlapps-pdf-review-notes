@@ -8,7 +8,7 @@
 
 PDF Review Notes is a local-first PDF review tool. Select text in a PDF, attach a structured review comment, and return to the anchored passage without modifying or uploading the original PDF.
 
-**Current release: v1.0.0.**
+**Current release: v1.0.1.**
 
 ## Live demo
 
@@ -18,7 +18,7 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 
 [![PDF Review Notes screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-pdf-review-notes/)
 
-## Features in v1.0.0
+## Features in v1.0.1
 
 - Add, edit, delete, and revisit text or rectangular area reviews
 - Track each review as Open or Resolved
@@ -114,7 +114,8 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 | v0.7.0 | Standalone HTML Review Report |
 | v0.8.0 | UI / UX Finish |
 | v0.9.0 | Release Candidate / Regression |
-| **v1.0.0** | **Formal Release — current** |
+| v1.0.0 | Formal Release |
+| **v1.0.1** | **Consistent EN / JA header controls — current** |
 
 See [APP_SPEC.md](APP_SPEC.md) for the product contract.
 
