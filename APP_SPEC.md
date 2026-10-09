@@ -1,10 +1,15 @@
 # APP_SPEC.md — PDF Review Notes
 
+## v1.0.2 — Icon normalization
+
+- Canonical background and matching artwork green: `#16624f`; background x/y radii exactly 25% of their respective dimensions.
+- Preserve artwork, padding, app behavior, and synchronized header/favicon/download/loader representations.
+
 ## 1. Product identity
 
 - **Name:** PDF Review Notes
-- **Version:** 1.0.1
-- **Current release:** v1.0.1 — Header consistency
+- **Version:** 1.0.2
+- **Current release:** v1.0.2 — Header consistency
 - **Purpose:** Open a local PDF, review selectable text or rectangular regions, manage structured comments, and return to anchored locations without modifying or uploading the original PDF.
 - **Primary users:** People reviewing specifications, reports, manuscripts, papers, proposals, manuals, and other PDF documents.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
@@ -22,7 +27,7 @@ The v1.0 product flow remains:
 5. Resume the review locally.
 6. Export Markdown, CSV, session JSON, or a standalone HTML review report.
 
-## 3. Current release — v1.0.1
+## 3. Current release — v1.0.2
 
 v1.0.0 was the first formal release. v1.0.1 standardizes EN / JA target-language buttons and localized accessible language labels while preserving the existing local-processing badge. It preserves the completed review workflow and focuses on a stable local-first experience across desktop/mobile, Japanese/English, file:// use, session resume, and review exports.
 
