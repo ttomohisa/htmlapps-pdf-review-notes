@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 - 2026-10-10
+
+- Keep the background document stationary while any modal dialog is open; closing it restores normal scrolling.
+
 ## [1.0.3] - 2026-10-10
 
 ### Fixed

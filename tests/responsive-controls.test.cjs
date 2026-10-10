@@ -22,3 +22,7 @@ test('narrow zoom and fit groups can wrap without hiding later controls', () => 
   assert.match(rule('.viewer-toolbar'), /position:\s*relative\s*;/);
   assert.match(rule('.viewer-toolbar'), /top:\s*auto\s*;/);
 });
+
+test('an open modal locks the underlying document scroll', () => {
+  assert.match(css, /html:has\(dialog\[open\]\)\s*\{[^}]*overflow:\s*hidden/);
+});

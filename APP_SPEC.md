@@ -293,3 +293,5 @@ Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft P
 - Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.
 - Preserve existing input, editing/review, filename, export, privacy, and canonical icon behavior.
 - Check native desktop and narrow/short CSS viewports in Japanese and English; report physical phone/Safari/on-screen keyboard coverage separately.
+
+- Modal dialogs lock document scrolling without changing the current page position; internal dialog scrolling remains available.

@@ -168,3 +168,5 @@ Licensed under the [MIT License](LICENSE).
 ### Responsive dialogs and controls
 
 Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.
+
+Modal dialogs keep the background document stationary until closed.
