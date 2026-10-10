@@ -148,3 +148,7 @@ build-standalone.bat
 Copyright © 2026 ttomohisa
 
 [MIT License](LICENSE) で公開します。
+
+### 画面サイズに応じた操作
+
+狭い画面ではPDFのページ・矩形レビューと拡大縮小・表示モードを別の行に配置し、操作が横に切れないようにします。

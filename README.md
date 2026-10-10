@@ -164,3 +164,7 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Responsive dialogs and controls
+
+Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.

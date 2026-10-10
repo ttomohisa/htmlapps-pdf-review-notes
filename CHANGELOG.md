@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.3] - 2026-10-10
+
+### Fixed
+- Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.
+- Add focused responsive CSS regression checks.
+
 ## 1.0.2 - 2026-10-09
 
 - Normalize icon brand color and exact 25% background corner radii without changing artwork.
