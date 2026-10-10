@@ -8,8 +8,8 @@
 ## 1. Product identity
 
 - **Name:** PDF Review Notes
-- **Version:** 1.0.2
-- **Current release:** v1.0.2 — Header consistency
+- **Version:** 1.0.3
+- **Current release:** v1.0.3 — Narrow viewer controls
 - **Purpose:** Open a local PDF, review selectable text or rectangular regions, manage structured comments, and return to anchored locations without modifying or uploading the original PDF.
 - **Primary users:** People reviewing specifications, reports, manuscripts, papers, proposals, manuals, and other PDF documents.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
@@ -27,7 +27,7 @@ The v1.0 product flow remains:
 5. Resume the review locally.
 6. Export Markdown, CSV, session JSON, or a standalone HTML review report.
 
-## 3. Current release — v1.0.2
+## 3. Current release — v1.0.3
 
 v1.0.0 was the first formal release. v1.0.1 standardizes EN / JA target-language buttons and localized accessible language labels while preserving the existing local-processing badge. It preserves the completed review workflow and focuses on a stable local-first experience across desktop/mobile, Japanese/English, file:// use, session resume, and review exports.
 
@@ -287,3 +287,9 @@ Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft P
 - **v0.9.0:** Release Candidate / Regression.
 - **v1.0.0:** Final documentation, screenshots, compatibility regression, and formal release.
 - **v1.0.1:** Consistent bilingual header controls. **Current.**
+
+## v1.0.3 — Responsive layout audit
+
+- Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.
+- Preserve existing input, editing/review, filename, export, privacy, and canonical icon behavior.
+- Check native desktop and narrow/short CSS viewports in Japanese and English; report physical phone/Safari/on-screen keyboard coverage separately.
