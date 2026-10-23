@@ -26,3 +26,9 @@ test('narrow zoom and fit groups can wrap without hiding later controls', () => 
 test('an open modal locks the underlying document scroll', () => {
   assert.match(css, /html:has\(dialog\[open\]\)\s*\{[^}]*overflow:\s*hidden/);
 });
+
+test('mobile informational footer hides without removing PDF and Review destinations', () => {
+  assert.match(rule('.app-footer'), /display:\s*none/);
+  assert.match(rule('.mobile-tabs'), /display:\s*grid/);
+  assert.match(rule('.main'), /padding:[^;]*84px/);
+});

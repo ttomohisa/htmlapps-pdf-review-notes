@@ -208,6 +208,8 @@ Selecting a review:
 
 ## 12. Smartphone model
 
+- Hide only the informational app footer at the existing 820px mobile breakpoint. Preserve functional PDF/Reviews navigation, its safe-area clearance, and the wider-screen footer.
+
 v1.0.0 keeps the two-destination mobile model:
 
 - **PDF**
