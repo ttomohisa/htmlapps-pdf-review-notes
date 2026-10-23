@@ -31,7 +31,13 @@ async function checkActions(page, width, height, label) {
 async function exerciseActions(page, width, height, label) {
   await page.locator('#fileInput').setInputFiles({name:'synthetic.pdf', mimeType:'application/pdf', buffer:syntheticPdf()});
   await page.locator('#readyState').waitFor();
-  await page.waitForFunction(() => document.querySelector('#pdfCanvas').width > 1);
+  // A visible viewer/default canvas can precede parsing; wait for the fixture's green shape.
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector('#pdfCanvas');
+    if (!canvas || canvas.width <= 1 || canvas.height <= 1) return false;
+    const pixel = canvas.getContext('2d').getImageData(Math.floor(canvas.width / 2), Math.floor(canvas.height * .75), 1, 1).data;
+    return document.querySelector('#fileName').textContent === 'synthetic.pdf' && pixel[3] === 255 && pixel[1] > pixel[0] + 20;
+  });
   if (isPhone(width, height)) {
     await page.locator('#mobileReviewsTab').click();
     assert.match(await page.locator('#mobileReviewsTab').getAttribute('class'), /is-active/);
@@ -87,7 +93,8 @@ async function main() {
 
         await page.locator(HELP).click();
         const body = page.locator('#helpDialog .dialog-body');
-        await body.evaluate(el => { el.scrollTop = el.scrollHeight; });
+        // This app scrolls the native dialog, with its header sticky inside it.
+        await page.locator('#helpDialog').evaluate(el => { el.scrollTop = el.scrollHeight; });
         const finalItem = page.locator('#helpDialog .dialog-body p:visible, #helpDialog .dialog-body li:visible').last();
         const end = await finalItem.evaluate(el => { const r = el.getBoundingClientRect(), b = el.closest('.dialog-body').getBoundingClientRect(), d = el.closest('dialog').getBoundingClientRect(); return {top:r.top,bottom:r.bottom,clipTop:Math.max(0,b.top,d.top),clipBottom:Math.min(innerHeight,b.bottom,d.bottom)}; });
         assert.ok(end.top >= end.clipTop - 1 && end.bottom <= end.clipBottom + 1, label + ': final Help guidance reachable ' + JSON.stringify(end));
