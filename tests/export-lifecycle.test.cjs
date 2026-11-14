@@ -68,3 +68,10 @@ test('real area crop failure clears page and crop canvas without downloading par
 test('HTML malicious-looking comments, quotes and ids remain inert escaped data',async()=>{const h=harness();h.ctx.captureAreaReviewImages=async()=>new Map();const x='</script><script>alert(1)</script><img src=x onerror=alert(2)> & "';Object.assign(h.state.reviews[0],{id:x,comment:x,quote:x});h.state.file={name:x+'.pdf'};await h.ctx.exportHtmlReport();const html=await downloadedText(h);assert.doesNotMatch(html,/<script>alert\(1\)<\/script>/);assert.doesNotMatch(html,/<img src=x/);assert.match(html,/&lt;script&gt;alert\(1\)&lt;\/script&gt;/);assert.match(html,/\\u003c\/script\\u003e/)});
 for(const lang of ['ja','en'])test('real failure and cancellation are localized: '+lang,async()=>{const h=harness();vm.runInContext('language='+JSON.stringify(lang),h.ctx);h.ctx.captureAreaReviewImages=async()=>{throw new Error('error')};await h.ctx.exportHtmlReport();assert.equal(h.els.exportStatus.textContent,h.ctx.t('reportFailed'));const d=delayImages(h),p=h.ctx.exportHtmlReport();h.ctx.closeExportDialog();assert.equal(h.els.exportStatus.textContent,h.ctx.t('reportCancelled'));d.resolve(new Map());await p});
 test('real FileReader is abortable and clears its reference',async()=>{const h=harness();let reader;class FakeFileReader{constructor(){reader=this}readAsDataURL(){}abort(){this.onabort();this.onloadend()}}h.ctx.FileReader=FakeFileReader;vm.runInContext(section('function fileToBase64','function bytesToBase64'),h.ctx);h.ctx.captureAreaReviewImages=async()=>new Map();const p=h.ctx.exportHtmlReport();await new Promise(setImmediate);assert.ok(h.state.exportJob.reader);h.ctx.closeExportDialog();await p;assert.equal(h.downloads.length,0);assert.equal(h.errors.length,0)});
+
+test('CSV export prevents leading spreadsheet formulas without modifying safe text',()=>{
+ const h=harness();
+ for(const value of ['=1+1','+SUM(1,2)','-1+2','@HYPERLINK(A1)','  =2*3','\\t+cmd'])assert.ok(h.ctx.csvEscape(value).startsWith("'"),value);
+ assert.equal(h.ctx.csvEscape('ordinary note'),'ordinary note');
+ assert.equal(h.ctx.csvEscape('note, with comma'),'"note, with comma"');
+});
