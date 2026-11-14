@@ -71,7 +71,9 @@ test('real FileReader is abortable and clears its reference',async()=>{const h=h
 
 test('CSV export prevents leading spreadsheet formulas without modifying safe text',()=>{
  const h=harness();
- for(const value of ['=1+1','+SUM(1,2)','-1+2','@HYPERLINK(A1)','  =2*3','\\t+cmd'])assert.ok(h.ctx.csvEscape(value).startsWith("'"),value);
+ for(const value of ['=1+1','+SUM(1,2)','-1+2','@HYPERLINK(A1)','  =2*3',String.fromCharCode(9)+'+cmd']){
+   assert.match(h.ctx.csvEscape(value),/^"?'/,value);
+ }
  assert.equal(h.ctx.csvEscape('ordinary note'),'ordinary note');
  assert.equal(h.ctx.csvEscape('note, with comma'),'"note, with comma"');
 });
