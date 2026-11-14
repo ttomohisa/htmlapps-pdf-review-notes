@@ -27,3 +27,7 @@ test('viewer and area render canvas allocation limits remain present',()=>{
   assert.equal((source.match(/Math\.sqrt\(10000000\/Math\.max\(1,viewport\.width\*viewport\.height\)\)/g)||[]).length,2);
   assert.match(source,/Math\.sqrt\(10000000\/Math\.max\(1,baseViewport\.width\*baseViewport\.height\)\)/);
 });
+
+test('new PDF.js runs without external worker rendering or WASM downloads',()=>{
+  assert.equal((source.match(/useWorkerFetch:false,useWasm:false,disableWorkerRendering:true/g)||[]).length,2);
+});

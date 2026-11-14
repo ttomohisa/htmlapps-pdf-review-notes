@@ -20,7 +20,12 @@ jobs:
       - name: Resolve reviewed PDF.js update and verify standalone files
         shell: pwsh
         run: |
-          ./scripts/update-dependency.ps1 -Id pdfjs -Version 6.5.438 -SkipBuild
+          $config = Get-Content -Raw -Encoding UTF8 ./dependencies.json | ConvertFrom-Json
+          $pdfjs = @($config.dependencies | Where-Object { $_.id -eq 'pdfjs' })
+          if ($pdfjs.Count -ne 1) { throw 'Expected exactly one pdfjs dependency' }
+          $pdfjs[0].version = '6.5.438'
+          [System.IO.File]::WriteAllText((Join-Path $PWD 'dependencies.json'), ($config | ConvertTo-Json -Depth 30) + "`n", (New-Object System.Text.UTF8Encoding($false)))
+          ./scripts/sync-dependency-lock.ps1 -ForceDownload
           ./scripts/check-repository.ps1
       - name: Commit generated dependency lock and single HTML release alias
         shell: pwsh
