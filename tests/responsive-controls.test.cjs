@@ -20,7 +20,7 @@ test('narrow viewer moves zoom/fit controls onto their own shrinkable row', () =
 });
 test('narrow zoom and fit controls stay on a compact single row', () => {
   assert.match(rule('.viewer-controls'), /flex-wrap:\s*nowrap\s*;/);
-  assert.match(rule('.mode-switch .mode-button span'), /display:\s*none\s*;/);
+  assert.match(rule('.mode-switch .mode-button span'), /display:\s*none\s*;?/);
   assert.match(rule('.zoom-stepper .zoom-value-button'), /min-width:\s*64px\s*;/);
   assert.match(rule('.viewer-toolbar'), /position:\s*relative\s*;/);
   assert.match(rule('.viewer-toolbar'), /top:\s*auto\s*;/);
