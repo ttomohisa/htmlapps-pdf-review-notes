@@ -93,8 +93,10 @@ async function main() {
 
         await page.locator(HELP).click();
         const body = page.locator('#helpDialog .dialog-body');
-        // This app scrolls the native dialog, with its header sticky inside it.
-        await page.locator('#helpDialog').evaluate(el => { el.scrollTop = el.scrollHeight; });
+        // The outer dialog remains clipped; only its internal body scrolls.
+        await body.evaluate(el => { el.scrollTop = el.scrollHeight; });
+        assert.equal(await body.evaluate(el => getComputedStyle(el).overflowY), 'auto', label + ': Help scroll remains inside the dialog');
+        assert.equal(await page.locator('#helpDialog').evaluate(el => getComputedStyle(el).overflowY), 'hidden', label + ': outer Help frame never shows the scrollbar');
         const finalItem = page.locator('#helpDialog .dialog-body p:visible, #helpDialog .dialog-body li:visible').last();
         const end = await finalItem.evaluate(el => { const r = el.getBoundingClientRect(), b = el.closest('.dialog-body').getBoundingClientRect(), d = el.closest('dialog').getBoundingClientRect(); return {top:r.top,bottom:r.bottom,clipTop:Math.max(0,b.top,d.top),clipBottom:Math.min(innerHeight,b.bottom,d.bottom)}; });
         assert.ok(end.top >= end.clipTop - 1 && end.bottom <= end.clipBottom + 1, label + ': final Help guidance reachable ' + JSON.stringify(end));
@@ -108,6 +110,9 @@ async function main() {
         assert.equal(await page.evaluate(() => scrollY), beforeScroll, label + ': modal background locked');
         await page.keyboard.press('Escape');
         assert.equal(await page.locator('#helpDialog').isVisible(), false, label + ': Escape closes Help');
+        await page.locator(HELP).click();
+        await page.mouse.click(2, Math.floor(height / 2));
+        assert.equal(await page.locator('#helpDialog').isVisible(), false, label + ': backdrop tap closes Help');
         await page.locator(HELP).click();
         await page.locator('#helpDialog').locator(CLOSE).first().click();
         assert.equal(await page.locator('#helpDialog').isVisible(), false, label + ': Help reopens and closes');
