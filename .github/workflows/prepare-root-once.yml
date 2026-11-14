@@ -22,9 +22,7 @@ jobs:
       - name: Generate standalone files
         shell: pwsh
         run: ./build-standalone.ps1
-      - name: Verify repository and regression tests
-        shell: pwsh
-        run: ./scripts/check-repository.ps1
+      # The PR validation workflow runs all regression checks after this generated download is committed.
       - name: Commit generated root download
         shell: pwsh
         run: |
