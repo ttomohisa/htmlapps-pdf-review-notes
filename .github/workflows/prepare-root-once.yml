@@ -19,11 +19,12 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      - name: Rebuild standalone files and verify
+      - name: Generate standalone files
         shell: pwsh
-        run: |
-          ./build-standalone.ps1
-          ./scripts/check-repository.ps1
+        run: ./build-standalone.ps1
+      - name: Verify repository and regression tests
+        shell: pwsh
+        run: ./scripts/check-repository.ps1
       - name: Commit generated root download
         shell: pwsh
         run: |
