@@ -28,6 +28,63 @@ async function checkActions(page, width, height, label) {
     assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1 && box.y >= 0 && box.y + box.height <= height + 1, label + ': action bar stays inside viewport');
   }
 }
+async function checkMobileToolbar(page, width, height, label) {
+  if (!isPhone(width,height)) return;
+  const groups = await Promise.all(['.page-toolbar-group','.zoom-stepper','.mode-switch','.area-toolbar-group'].map(selector=>page.locator('.viewer-toolbar '+selector).boundingBox()));
+  assert.ok(groups.every(Boolean),label + ': all mobile toolbar groups are visible');
+  const [pages,zoom,fit,area]=groups;
+  for (const [index,box] of groups.entries()) {
+    assert.ok(box.x>=-1 && box.x+box.width<=width+1,label+': mobile toolbar item '+index+' fits horizontally '+JSON.stringify(box));
+  }
+  assert.ok(Math.abs(pages.y-zoom.y)<=2,label+': page and zoom are aligned in the first row');
+  assert.ok(Math.abs(fit.y-area.y)<=2,label+': fit and area controls are aligned in the second row');
+  assert.ok(fit.y>=pages.y+pages.height-2,label+': clear separation between mobile rows');
+  assert.ok(pages.x+pages.width<=zoom.x+2,label+': page navigation does not overlap zoom');
+  assert.ok(fit.x+fit.width<=area.x+2,label+': fit controls do not overlap area review');
+  for(const id of ['#previousPageButton','#nextPageButton','#zoomOutButton','#zoomInButton','#fitPageButton','#fitWidthButton','#areaReviewModeButton']) {
+    const b=await page.locator(id).boundingBox();
+    assert.ok(b&&b.height>=40&&b.width>=35,label+': touch target '+id+' at least 35x40 px');
+  }
+  assert.equal(await page.locator('.review-navigation').isVisible(),false,label+': unused review navigation hidden');
+}
+async function exerciseReviewWorkflow(page, width, height, label) {
+  const area=page.locator('#areaReviewModeButton');
+  await area.click();assert.equal(await area.getAttribute('aria-pressed'),'true',label+': area mode starts');
+  const layer=page.locator('#areaLayer');await layer.scrollIntoViewIfNeeded();
+  const b=await layer.boundingBox();assert.ok(b&&b.width>95&&b.height>95,label+': selectable area exists');
+  const x=b.x+Math.min(25,b.width/4),y=b.y+Math.min(25,b.height/4);
+  await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+50,y+50,{steps:6});await page.mouse.up();
+  await page.locator('#reviewDialog').waitFor({state:'visible'});
+  await page.locator('#reviewComment').fill('Release audit note');
+  await page.locator('#addReviewButton').click();
+  assert.equal(await page.locator('#reviewDialog').isVisible(),false,label+': review added and dialog closed');
+  if(isPhone(width,height))await page.locator('#mobileReviewsTab').click();
+  const card=page.locator('#reviewList .review-card');
+  assert.equal(await card.count(),1,label+': card created');
+  assert.match(await card.locator('.review-comment').textContent(),/Release audit note/);
+  await card.locator('.review-secondary-actions .review-action').first().click();
+  await page.locator('#reviewComment').fill('Updated release audit note');
+  await page.locator('#addReviewButton').click();
+  assert.match(await card.locator('.review-comment').textContent(),/Updated release audit note/);
+  const trash=card.locator('.review-action.is-danger');
+  assert.ok(await trash.getAttribute('aria-label'),label+': icon button is accessible');
+  await trash.click();await page.locator('#appConfirmCancel').click();
+  assert.equal(await card.count(),1,label+': cancel deletion preserves the card');
+  await trash.click();await page.locator('#appConfirmOk').click();
+  assert.equal(await card.count(),0,label+': confirmed deletion removes the card');
+  await page.locator('#appToastAction').click();
+  assert.equal(await card.count(),1,label+': Undo restores the card');
+  const [download]=await Promise.all([page.waitForEvent('download'),page.locator('#exportSessionButton').click()]);
+  assert.match(download.suggestedFilename(),/\.json$/,label+': session JSON is downloaded');
+  const data=JSON.parse(fs.readFileSync(await download.path(),'utf8'));
+  assert.equal(data.reviews.length,1,label+': session JSON contains review');
+  assert.equal(data.reviews[0].comment,'Updated release audit note');
+  await page.locator('#openExportButton').click();
+  const [csv]=await Promise.all([page.waitForEvent('download'),page.locator('#exportCsvButton').click()]);
+  assert.match(csv.suggestedFilename(),/\.csv$/,label+': CSV is downloaded');
+  const csvData=fs.readFileSync(await csv.path(),'utf8');
+  assert.match(csvData,/Updated release audit note/);
+}
 async function exerciseActions(page, width, height, label) {
   await page.locator('#fileInput').setInputFiles({name:'synthetic.pdf', mimeType:'application/pdf', buffer:syntheticPdf()});
   await page.locator('#readyState').waitFor();
@@ -44,6 +101,8 @@ async function exerciseActions(page, width, height, label) {
     await page.locator('#mobilePdfTab').click();
   }
   await checkActions(page, width, height, label);
+  await checkMobileToolbar(page, width, height, label);
+  if((width===320&&height===568&&label.includes(' ja '))||(width===1360&&height===900&&label.includes(' en '))) await exerciseReviewWorkflow(page,width,height,label);
 }
 
 async function main() {
@@ -58,7 +117,7 @@ async function main() {
     cases.push({file:'dist/index.self-extract.html', language:'en', width:360, height:640});
     cases.push({file:'pdf-review-notes.html', language:'ja', width:1360, height:900});
     for (const {file, language, width, height} of cases) {
-      const context = await browser.newContext({viewport:{width,height}, locale:language, reducedMotion:'reduce'});
+      const context = await browser.newContext({viewport:{width,height}, locale:language, reducedMotion:'reduce', acceptDownloads:true});
       const page = await context.newPage();
       const errors = [], requests = [];
       const label = `${file} ${language} ${width}x${height}`;
