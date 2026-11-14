@@ -1,12 +1,12 @@
 # Third-Party Notices
 
-PDF Review Notes v1.0.1 embeds the following runtime library and selected package assets at build time.
+PDF Review Notes v1.0.5 embeds the following runtime library and selected package assets at build time.
 
-## PDF.js / pdfjs-dist 6.2.108
+## PDF.js / pdfjs-dist 6.5.438
 
 - Project: PDF.js
 - Package: `pdfjs-dist`
-- Version: `6.2.108`
+- Version: `6.5.438`
 - License: Apache License 2.0
 - Homepage: https://mozilla.github.io/pdf.js/
 - Source: https://github.com/mozilla/pdf.js

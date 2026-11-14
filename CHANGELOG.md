@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Planned v1.0.5
+- Show failed autosave status and provide JSON backup.
+- Serialize PDF source transitions.
+- Cap viewer and area-render canvases at 10 million pixels, HTML PDF embedding at 64 MiB.
+- Make HTML report compression opt-in.
+- Update PDF.js to 6.5.438 with verified lock (Issue #1).
+- Synchronize bilingual docs and notices.
+
+
 - Hide the informational app footer in the existing phone layout while preserving PDF/Reviews navigation and the wider-screen footer.
 
 - Clarify Japanese and English help by removing internal layout, implementation, and audit commentary while preserving usage guidance and cautions.

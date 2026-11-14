@@ -8,7 +8,7 @@
 
 PDF Review Notes is a local-first PDF review tool. Select text in a PDF, attach a structured review comment, and return to the anchored passage without modifying or uploading the original PDF.
 
-**Current release: v1.0.1.**
+**Proposed version for this PR: v1.0.5 (not yet released).**
 
 ## Live demo
 
@@ -18,7 +18,7 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 
 [![PDF Review Notes screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-pdf-review-notes/)
 
-## Features in v1.0.1
+## Features in v1.0.5
 
 - Add, edit, delete, and revisit text or rectangular area reviews
 - Track each review as Open or Resolved
@@ -170,3 +170,11 @@ Licensed under the [MIT License](LICENSE).
 Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.
 
 Modal dialogs keep the background document stationary until closed.
+
+## v1.0.5 changes (pending)
+
+- Autosave failures now warn users and offer a JSON backup; do not close the tab before exporting unsaved work.
+- PDF viewer/area screenshot canvas buffers are limited to 10 million pixels; very large pages may display at lower resolution.
+- PDFs over 64 MiB cannot be included in HTML reports; other report formats and review-only HTML remain available.
+- HTML report compression is optional and off by default. Compressed reports need `DecompressionStream` in the receiving browser.
+- PDF.js updates to 6.5.438 (Issue #1), with worker and Japanese CMaps embedded at build time.

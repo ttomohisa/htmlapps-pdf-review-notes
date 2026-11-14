@@ -8,8 +8,8 @@
 ## 1. Product identity
 
 - **Name:** PDF Review Notes
-- **Version:** 1.0.3
-- **Current release:** v1.0.3 — Narrow viewer controls
+- **Version:** 1.0.5
+- **Proposed version:** v1.0.5 — Stability and dependency maintenance
 - **Purpose:** Open a local PDF, review selectable text or rectangular regions, manage structured comments, and return to anchored locations without modifying or uploading the original PDF.
 - **Primary users:** People reviewing specifications, reports, manuscripts, papers, proposals, manuals, and other PDF documents.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
@@ -27,7 +27,7 @@ The v1.0 product flow remains:
 5. Resume the review locally.
 6. Export Markdown, CSV, session JSON, or a standalone HTML review report.
 
-## 3. Current release — v1.0.3
+## 3. Proposed release — v1.0.5
 
 v1.0.0 was the first formal release. v1.0.1 standardizes EN / JA target-language buttons and localized accessible language labels while preserving the existing local-processing badge. It preserves the completed review workflow and focuses on a stable local-first experience across desktop/mobile, Japanese/English, file:// use, session resume, and review exports.
 
@@ -93,7 +93,7 @@ Those belong to later milestones.
 PDF.js is declared through the template dependency contract:
 
 - Package: `pdfjs-dist`
-- Version: `6.2.108`
+- Version: `6.5.438`
 - License: Apache-2.0
 - Embedded assets: `build/pdf.min.mjs`, `build/pdf.worker.min.mjs`, `cmaps/UniJIS-UCS2-H.bcmap`, `cmaps/Adobe-Japan1-UCS2.bcmap`
 - Update policy: manual
@@ -297,3 +297,12 @@ Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft P
 - Check native desktop and narrow/short CSS viewports in Japanese and English; report physical phone/Safari/on-screen keyboard coverage separately.
 
 - Modal dialogs lock document scrolling without changing the current page position; internal dialog scrolling remains available.
+
+## v1.0.5 stability requirements
+
+- Display autosave failures and offer a JSON backup; future edits should retry persistence.
+- Serialize asynchronous PDF source disposal to avoid stale source resets.
+- Limit viewer and cropped area canvas backing buffers to 10 million pixels.
+- Prevent source PDF embedding into HTML reports above 64 MiB while preserving review-only exports.
+- Use uncompressed HTML reports by default, with an explicit optional compression control.
+- Update `pdfjs-dist` 6.2.108 to 6.5.438 with verified npm integrity, embedded worker/CMaps and offline build (Issue #1).
