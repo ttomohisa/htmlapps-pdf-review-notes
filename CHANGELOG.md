@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-### Planned v1.0.5
+### [1.0.5]
 - Refine the mobile PDF toolbar with clearly grouped page, zoom, fit and area-review controls.
 - Fix zoom-out unexpectedly magnifying a fit-width PDF, and prevent stale source/import actions from changing newer documents.
 - Track unsaved session changes and warn before switching PDFs without a completed local save.
@@ -33,8 +33,6 @@
 
 - Normalize icon brand color and exact 25% background corner radii without changing artwork.
 - Rebuild matching header, favicon, download alias, and self-extract representations.
-
-## Unreleased
 
 ## [1.0.1] - 2026-10-06
 

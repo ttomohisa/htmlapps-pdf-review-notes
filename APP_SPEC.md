@@ -9,7 +9,7 @@
 
 - **Name:** PDF Review Notes
 - **Version:** 1.0.5
-- **Proposed version:** v1.0.5 — Stability and dependency maintenance
+- **Release scope:** v1.0.5 — Stability, mobile interface, dependencies, and automatic release
 - **Purpose:** Open a local PDF, review selectable text or rectangular regions, manage structured comments, and return to anchored locations without modifying or uploading the original PDF.
 - **Primary users:** People reviewing specifications, reports, manuscripts, papers, proposals, manuals, and other PDF documents.
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`.
@@ -27,7 +27,7 @@ The v1.0 product flow remains:
 5. Resume the review locally.
 6. Export Markdown, CSV, session JSON, or a standalone HTML review report.
 
-## 3. Proposed release — v1.0.5
+## 3. Release scope — v1.0.5
 
 v1.0.0 was the first formal release. v1.0.1 standardizes EN / JA target-language buttons and localized accessible language labels while preserving the existing local-processing badge. It preserves the completed review workflow and focuses on a stable local-first experience across desktop/mobile, Japanese/English, file:// use, session resume, and review exports.
 
@@ -306,3 +306,12 @@ Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft P
 - Prevent source PDF embedding into HTML reports above 64 MiB while preserving review-only exports.
 - Use uncompressed HTML reports by default, with an explicit optional compression control.
 - Update `pdfjs-dist` 6.2.108 to 6.5.438 with verified npm integrity, embedded worker/CMaps and offline build (Issue #1).
+
+## v1.0.5 final release checks
+
+- On phone widths, row one groups page navigation and zoom; row two groups fit modes and area-review toggle, with accessible 44px-height targets. When no reviews exist, redundant review navigation is hidden on phone.
+- Zoom +/- uses actual fit mode magnification, not an assumed 100%, and manual zoom can decrease to 20%.
+- Treat reviews as unsaved until the latest IndexedDB transaction succeeds. Overlapping writes must be serialized, failed storage warned about, and stale writes must not clear errors for newer changes.
+- Reject stale PDF opens and JSON imports after source changes; require an array of reviews, at most 10,000, in import JSON of at most 50 MiB; reject nonfinite/invalid annotation rectangles and clamp restored pages.
+- CSV exports guard formula-like cells; HTML reports do not embed source PDFs above 64 MiB. PDF.js 6.5.438 and Japanese CMaps remain embedded with no runtime fetches.
+- A successful push to main after merge validates and publishes a versioned tag and GitHub Release, with both HTML builds, ZIP, and SHA-256 checksums. Existing tags and releases are not overwritten.

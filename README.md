@@ -8,7 +8,7 @@
 
 PDF Review Notes is a local-first PDF review tool. Select text in a PDF, attach a structured review comment, and return to the anchored passage without modifying or uploading the original PDF.
 
-**Proposed version for this PR: v1.0.5 (not yet released).**
+**Source version: v1.0.5.** GitHub Release is published after the PR is merged and checks pass.
 
 ## Live demo
 
@@ -119,7 +119,7 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 | v1.0.2 | Icon normalization |
 | v1.0.3 | Narrow viewer controls |
 | v1.0.4 | Modal scroll locking |
-| **v1.0.5** | **Persistence, PDF.js update, report compatibility — proposed** |
+| **v1.0.5** | **Persistence, PDF.js update, report compatibility** |
 
 See [APP_SPEC.md](APP_SPEC.md) for the product contract.
 
@@ -175,7 +175,7 @@ Wrap narrow-screen PDF controls into separate rows so page navigation, area revi
 
 Modal dialogs keep the background document stationary until closed.
 
-## v1.0.5 changes (pending)
+## Changes in v1.0.5
 
 - Autosave failures now warn users and offer a JSON backup; do not close the tab before exporting unsaved work.
 - PDF viewer/area screenshot canvas buffers are limited to 10 million pixels; very large pages may display at lower resolution.
@@ -186,3 +186,12 @@ Modal dialogs keep the background document stationary until closed.
 ### Automatic releases
 
 After a pull request is merged into `main`, GitHub Actions validates the committed source and publishes a tag and GitHub Release for the version in `app.config.json` (currently targeting `v1.0.5`). Release assets include the readable and self-extracting HTML files, a ZIP with documentation and licensing, and SHA-256 checksums. Existing tags/releases are not overwritten. Pull requests themselves do not publish releases.
+
+### Release review checklist
+
+- Verify the narrow PDF toolbar and review cards in Japanese and English; check the 320px layout and mobile bottom tabs.
+- Check opening a PDF, text/area annotations, editing, resolution, confirming deletion, Undo, autosave/restore, JSON import/export, CSV/Markdown and HTML report generation.
+- When autosave is incomplete or unavailable, export the review JSON before replacing the PDF; browser storage is not a guaranteed backup.
+- HTML exports only embed source PDFs up to 64 MiB. JSON imports are capped at 50 MiB and 10,000 reviews. User files are never uploaded by the app.
+- CSV content beginning with spreadsheet formula prefixes is escaped to avoid accidental formula evaluation.
+- Chromium CI is automated. Safari/iOS and representative Japanese-font/scanned PDFs still need manual release checks.

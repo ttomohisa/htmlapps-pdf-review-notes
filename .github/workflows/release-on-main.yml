@@ -86,11 +86,10 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $tag = $env:RELEASE_TAG
           $prefix = "htmlapps-pdf-review-notes-$tag"
-          gh release create $tag "release/$prefix.html" "release/$prefix.self-extract.html" "release/$prefix.zip" "release/SHA256SUMS.txt" --target $env:GITHUB_SHA --title "PDF Review Notes $tag" --generate-notes --verify-tag
-          if ($LASTEXITCODE -ne 0) {
-            # --verify-tag cannot create a tag; retry without it only when the version tag did not exist.
-            git fetch --tags origin
-            if (git tag --list $tag) { throw "Release creation failed for existing tag $tag" }
-            gh release create $tag "release/$prefix.html" "release/$prefix.self-extract.html" "release/$prefix.zip" "release/SHA256SUMS.txt" --target $env:GITHUB_SHA --title "PDF Review Notes $tag" --generate-notes
-            if ($LASTEXITCODE -ne 0) { throw "GitHub Release creation failed: $tag" }
+          $assets = @("release/$prefix.html","release/$prefix.self-extract.html","release/$prefix.zip","release/SHA256SUMS.txt")
+          if (git tag --list $tag) {
+            gh release create $tag @assets --target $env:GITHUB_SHA --title "PDF Review Notes $tag" --generate-notes --verify-tag
+          } else {
+            gh release create $tag @assets --target $env:GITHUB_SHA --title "PDF Review Notes $tag" --generate-notes
           }
+          if ($LASTEXITCODE -ne 0) { throw "GitHub Release creation failed: $tag" }
