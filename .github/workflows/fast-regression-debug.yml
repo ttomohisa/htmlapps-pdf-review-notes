@@ -5,15 +5,26 @@ on:
 permissions:
   contents: read
 jobs:
-  fast-node:
+  individual-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        file:
+          - export-lifecycle.test.cjs
+          - header-localization.test.cjs
+          - help-copy.test.cjs
+          - release-artifacts.test.cjs
+          - responsive-controls.test.cjs
+          - review-navigation.test.cjs
+          - session-persistence.test.cjs
+          - stability-fixes.test.cjs
+          - release-readiness.test.cjs
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 4
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      - name: Run release readiness tests
-        run: node --test --test-reporter spec tests/release-readiness.test.cjs
-      - name: Run all source regression tests
-        run: node --test --test-reporter spec tests/*.test.cjs
+      - name: Run one regression suite
+        run: node --test --test-timeout=30000 --test-reporter=spec tests/${{ matrix.file }}
