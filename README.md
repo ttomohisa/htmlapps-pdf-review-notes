@@ -8,7 +8,7 @@
 
 PDF Review Notes is a local-first PDF review tool. Select text in a PDF, attach a structured review comment, and return to the anchored passage without modifying or uploading the original PDF.
 
-**Current release: v1.0.1.**
+**Source version: v1.0.5.** GitHub Release is published after the PR is merged and checks pass.
 
 ## Live demo
 
@@ -18,7 +18,7 @@ The initial HTML is delivered by GitHub Pages. After that, the selected PDF and 
 
 [![PDF Review Notes screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-pdf-review-notes/)
 
-## Features in v1.0.1
+## Features in v1.0.5
 
 - Add, edit, delete, and revisit text or rectangular area reviews
 - Track each review as Open or Resolved
@@ -115,7 +115,11 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 | v0.8.0 | UI / UX Finish |
 | v0.9.0 | Release Candidate / Regression |
 | v1.0.0 | Formal Release |
-| **v1.0.1** | **Consistent EN / JA header controls — current** |
+| v1.0.1 | Consistent EN / JA header controls |
+| v1.0.2 | Icon normalization |
+| v1.0.3 | Narrow viewer controls |
+| v1.0.4 | Modal scroll locking |
+| **v1.0.5** | **Persistence, PDF.js update, report compatibility** |
 
 See [APP_SPEC.md](APP_SPEC.md) for the product contract.
 
@@ -147,7 +151,7 @@ The first build downloads the exact dependency tarball pinned by the lock file, 
 
 | Library | Version | License | Purpose |
 | --- | ---: | --- | --- |
-| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF parsing/rendering, selectable text layer, PDF/view coordinates, bundled Japanese CMaps |
+| PDF.js (`pdfjs-dist`) | 6.5.438 | Apache-2.0 | PDF parsing/rendering, selectable text layer, PDF/view coordinates, bundled Japanese CMaps |
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
@@ -170,3 +174,24 @@ Licensed under the [MIT License](LICENSE).
 Wrap narrow-screen PDF controls into separate rows so page navigation, area review, fit modes, and zoom stay reachable.
 
 Modal dialogs keep the background document stationary until closed.
+
+## Changes in v1.0.5
+
+- Autosave failures now warn users and offer a JSON backup; do not close the tab before exporting unsaved work.
+- PDF viewer/area screenshot canvas buffers are limited to 10 million pixels; very large pages may display at lower resolution.
+- PDFs over 64 MiB cannot be included in HTML reports; other report formats and review-only HTML remain available.
+- HTML report compression is optional and off by default. Compressed reports need `DecompressionStream` in the receiving browser.
+- PDF.js updates to 6.5.438 (Issue #1), with worker and Japanese CMaps embedded at build time.
+
+### Automatic releases
+
+After a pull request is merged into `main`, GitHub Actions validates the committed source and publishes a tag and GitHub Release for the version in `app.config.json` (currently targeting `v1.0.5`). Release assets include the readable and self-extracting HTML files, a ZIP with documentation and licensing, and SHA-256 checksums. Existing tags/releases are not overwritten. Pull requests themselves do not publish releases.
+
+### Release review checklist
+
+- Verify the narrow PDF toolbar and review cards in Japanese and English; check the 320px layout and mobile bottom tabs.
+- Check opening a PDF, text/area annotations, editing, resolution, confirming deletion, Undo, autosave/restore, JSON import/export, CSV/Markdown and HTML report generation.
+- When autosave is incomplete or unavailable, export the review JSON before replacing the PDF; browser storage is not a guaranteed backup.
+- HTML exports only embed source PDFs up to 64 MiB. JSON imports are capped at 50 MiB and 10,000 reviews. User files are never uploaded by the app.
+- CSV content beginning with spreadsheet formula prefixes is escaped to avoid accidental formula evaluation.
+- Chromium CI is automated. Safari/iOS and representative Japanese-font/scanned PDFs still need manual release checks.

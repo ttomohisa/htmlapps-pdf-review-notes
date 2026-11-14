@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### [1.0.5]
+- Refine the mobile PDF toolbar with clearly grouped page, zoom, fit and area-review controls.
+- Fix zoom-out unexpectedly magnifying a fit-width PDF, and prevent stale source/import actions from changing newer documents.
+- Track unsaved session changes and warn before switching PDFs without a completed local save.
+- Generate GitHub version tags and downloadable Releases automatically after merging to main.
+- Show failed autosave status and provide JSON backup.
+- Serialize PDF source transitions.
+- Cap viewer and area-render canvases at 10 million pixels, HTML PDF embedding at 64 MiB.
+- Make HTML report compression opt-in.
+- Update PDF.js to 6.5.438 with verified lock (Issue #1).
+- Synchronize bilingual docs and notices.
+
+
 - Hide the informational app footer in the existing phone layout while preserving PDF/Reviews navigation and the wider-screen footer.
 
 - Clarify Japanese and English help by removing internal layout, implementation, and audit commentary while preserving usage guidance and cautions.
@@ -20,8 +33,6 @@
 
 - Normalize icon brand color and exact 25% background corner radii without changing artwork.
 - Rebuild matching header, favicon, download alias, and self-extract representations.
-
-## Unreleased
 
 ## [1.0.1] - 2026-10-06
 
