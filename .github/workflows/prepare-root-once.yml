@@ -5,6 +5,9 @@ on:
       - fix/pdf-review-notes-stability-20261115
 permissions:
   contents: write
+concurrency:
+  group: pdf-review-notes-one-time-alias
+  cancel-in-progress: true
 jobs:
   build-and-commit:
     runs-on: windows-latest
