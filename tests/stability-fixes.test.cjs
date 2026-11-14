@@ -2,7 +2,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const source=fs.readFileSync(path.join(__dirname,'../src/index.template.html'),'utf8');
 function extract(a,b){const i=source.indexOf(a),j=source.indexOf(b,i+a.length);assert(i>=0&&j>i,a);return source.slice(i,j)}
 test('autosave failure offers a JSON backup, and later success clears the error',async()=>{
-  const state={generation:1,sessionKey:'hash',file:{name:'a.pdf'},sessionPersistenceDisabled:false,lastSavedAt:'',sessionPersistenceError:false};
+  const state={generation:1,sessionKey:'hash',file:{name:'a.pdf'},sessionPersistenceDisabled:false,lastSavedAt:'',sessionPersistenceError:false,saveRevision:0,savedRevision:-1};
   const events=[],record={id:'hash',savedAt:'now'};let fail=true;
   const ctx=vm.createContext({state,buildSessionRecord:()=>record,idbPut:async()=>{if(fail)throw Error('quota');return record;},AppToast:{show:(message,options)=>events.push({message,options})},t:x=>x,setStatus:x=>events.push(x),updateSessionStatus:()=>events.push('status')});
   vm.runInContext(extract('async function persistSession()','async function restoreSavedSession()'),ctx);
