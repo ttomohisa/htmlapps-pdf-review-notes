@@ -4,7 +4,7 @@
     {
       "id": "pdfjs",
       "package": "pdfjs-dist",
-      "version": "6.2.108",
+      "version": "6.5.438",
       "license": "Apache-2.0",
       "homepage": "https://mozilla.github.io/pdf.js/",
       "assets": [
