@@ -182,3 +182,7 @@ Modal dialogs keep the background document stationary until closed.
 - PDFs over 64 MiB cannot be included in HTML reports; other report formats and review-only HTML remain available.
 - HTML report compression is optional and off by default. Compressed reports need `DecompressionStream` in the receiving browser.
 - PDF.js updates to 6.5.438 (Issue #1), with worker and Japanese CMaps embedded at build time.
+
+### Automatic releases
+
+After a pull request is merged into `main`, GitHub Actions validates the committed source and publishes a tag and GitHub Release for the version in `app.config.json` (currently targeting `v1.0.5`). Release assets include the readable and self-extracting HTML files, a ZIP with documentation and licensing, and SHA-256 checksums. Existing tags/releases are not overwritten. Pull requests themselves do not publish releases.

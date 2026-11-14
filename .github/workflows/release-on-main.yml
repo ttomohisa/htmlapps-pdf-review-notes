@@ -1,0 +1,96 @@
+name: Publish tagged release after merging to main
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: pdf-review-notes-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact main commit
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Verify version and check for an existing release
+        id: version
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $config = Get-Content -Raw -Encoding UTF8 ./app.config.json | ConvertFrom-Json
+          $version = [string]$config.version
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "Expected a stable Semantic Version: $version" }
+          $tag = "v$version"
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $existingRelease = gh release view $tag --json tagName --jq .tagName 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            "skip=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            Write-Host "Release $tag already exists; keeping it untouched."
+            exit 0
+          }
+          git fetch --tags origin
+          $existingTag = git tag --list $tag
+          if ($existingTag) {
+            $tagCommit = (git rev-list -n 1 $tag).Trim()
+            if ($tagCommit -ne $env:GITHUB_SHA) {
+              throw "Tag $tag already points to $tagCommit, not $env:GITHUB_SHA. Refusing to move it."
+            }
+          }
+          "skip=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Build, test and verify both one-file variants
+        if: steps.version.outputs.skip == 'false'
+        shell: pwsh
+        run: |
+          ./scripts/check-repository.ps1
+          if ($LASTEXITCODE -ne 0) { throw 'Repository verification failed' }
+      - name: Package downloads and SHA-256 checksums
+        if: steps.version.outputs.skip == 'false'
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force release | Out-Null
+          $prefix = "htmlapps-pdf-review-notes-$env:RELEASE_TAG"
+          $readable = "release/$prefix.html"
+          $compact = "release/$prefix.self-extract.html"
+          $archive = "release/$prefix.zip"
+          Copy-Item -LiteralPath dist/index.html -Destination $readable
+          Copy-Item -LiteralPath dist/index.self-extract.html -Destination $compact
+          Compress-Archive -LiteralPath @($readable,$compact,'README.md','README.ja.md','THIRD_PARTY_NOTICES.md','LICENSE') -DestinationPath $archive -CompressionLevel Optimal
+          $checks = foreach ($file in @($readable,$compact,$archive)) {
+            $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $file).Path)
+            $hash = [Convert]::ToHexString([System.Security.Cryptography.SHA256]::HashData($bytes)).ToLowerInvariant()
+            "$hash  $([System.IO.Path]::GetFileName($file))"
+          }
+          [System.IO.File]::WriteAllText((Join-Path (Get-Location) 'release/SHA256SUMS.txt'), ($checks -join "`n") + "`n", [System.Text.UTF8Encoding]::new($false))
+      - name: Create tag and publish GitHub Release
+        if: steps.version.outputs.skip == 'false'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tag = $env:RELEASE_TAG
+          $prefix = "htmlapps-pdf-review-notes-$tag"
+          gh release create $tag "release/$prefix.html" "release/$prefix.self-extract.html" "release/$prefix.zip" "release/SHA256SUMS.txt" --target $env:GITHUB_SHA --title "PDF Review Notes $tag" --generate-notes --verify-tag
+          if ($LASTEXITCODE -ne 0) {
+            # --verify-tag cannot create a tag; retry without it only when the version tag did not exist.
+            git fetch --tags origin
+            if (git tag --list $tag) { throw "Release creation failed for existing tag $tag" }
+            gh release create $tag "release/$prefix.html" "release/$prefix.self-extract.html" "release/$prefix.zip" "release/SHA256SUMS.txt" --target $env:GITHUB_SHA --title "PDF Review Notes $tag" --generate-notes
+            if ($LASTEXITCODE -ne 0) { throw "GitHub Release creation failed: $tag" }
+          }

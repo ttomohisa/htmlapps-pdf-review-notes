@@ -166,3 +166,7 @@ Copyright © 2026 ttomohisa
 - 64 MiBを超えるPDFはHTMLに原本を含められません。レビューだけのHTMLや、その他の書き出し形式は使用できます。
 - HTMLレポートの圧縮は任意で、初期状態ではオフです。圧縮版の閲覧には受け取り側の `DecompressionStream` 対応が必要です。
 - Issue #1 に対応してPDF.jsを6.5.438へ更新し、Workerと日本語CMapをビルド時に内包します。
+
+### マージ後の自動リリース
+
+PRを `main` にマージすると、GitHub Actionsが検査を行い、`app.config.json` に記載されたバージョン（今回の予定は `v1.0.5`）のタグとGitHub Releaseを作成します。通常版と自己展開版のHTML、ドキュメントとライセンスを含むZIP、SHA-256チェックサムを添付します。既存のタグやReleaseは上書きしません。PR作成時点では公開しません。

@@ -3,6 +3,10 @@
 ## Unreleased
 
 ### Planned v1.0.5
+- Refine the mobile PDF toolbar with clearly grouped page, zoom, fit and area-review controls.
+- Fix zoom-out unexpectedly magnifying a fit-width PDF, and prevent stale source/import actions from changing newer documents.
+- Track unsaved session changes and warn before switching PDFs without a completed local save.
+- Generate GitHub version tags and downloadable Releases automatically after merging to main.
 - Show failed autosave status and provide JSON backup.
 - Serialize PDF source transitions.
 - Cap viewer and area-render canvases at 10 million pixels, HTML PDF embedding at 64 MiB.
