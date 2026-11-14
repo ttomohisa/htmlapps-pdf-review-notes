@@ -26,6 +26,7 @@ jobs:
           $pdfjs[0].version = '6.5.438'
           [System.IO.File]::WriteAllText((Join-Path $PWD 'dependencies.json'), ($config | ConvertTo-Json -Depth 30) + "`n", (New-Object System.Text.UTF8Encoding($false)))
           ./scripts/sync-dependency-lock.ps1 -ForceDownload
+          ./build-standalone.ps1
           ./scripts/check-repository.ps1
       - name: Commit generated dependency lock and single HTML release alias
         shell: pwsh
