@@ -288,7 +288,7 @@ Source tests, mocked PDF boundaries, builds, artifact parity checks, and Draft P
 - **v0.8.0:** UI / UX Finish.
 - **v0.9.0:** Release Candidate / Regression.
 - **v1.0.0:** Final documentation, screenshots, compatibility regression, and formal release.
-- **v1.0.1:** Consistent bilingual header controls. **Current.**
+- **v1.0.1:** Consistent bilingual header controls (historical release).
 
 ## v1.0.3 — Responsive layout audit
 

@@ -20,10 +20,10 @@ function productionFunction(name) {
 function harness({ delayedOpen = false, confirmed = true } = {}) {
   const records = new Map();
   let resolveOpen, putTransactions = 0;
-  const db = { transaction() { return { objectStore() { return {
-    put(record) { putTransactions++; const request = {}; queueMicrotask(() => { records.set(record.id, record); request.onsuccess?.(); }); return request; },
-    delete(id) { const request = {}; queueMicrotask(() => { records.delete(id); request.onsuccess?.(); }); return request; }
-  }; } }; } };
+  const db = { transaction() { const tx = { objectStore() { return {
+    put(record) { putTransactions++; const request = {}; queueMicrotask(() => { records.set(record.id, record); request.onsuccess?.(); tx.oncomplete?.(); }); return request; },
+    delete(id) { const request = {}; queueMicrotask(() => { records.delete(id); request.onsuccess?.(); tx.oncomplete?.(); }); return request; }
+  }; } }; return tx; } };
   const pendingOpen = delayedOpen ? new Promise(resolve => { resolveOpen = () => resolve(db); }) : Promise.resolve(db);
   const state = { generation: 1, file: { name: 'synthetic.pdf' }, sessionKey: 'synthetic-hash', lastSavedAt: '', autosaveTimer: 0, sessionPersistenceDisabled: false };
   const context = vm.createContext({ state, records, setTimeout, clearTimeout, cancelReportExport() {}, els: { exportDialog: { open: false }, includePdf: {}, includeAreaImages: {} }, SESSION_STORE: 'reviewSessions', openSessionDb: () => pendingOpen,

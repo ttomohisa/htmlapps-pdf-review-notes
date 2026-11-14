@@ -115,7 +115,11 @@ v1.0.0 is the first formal release. The feature set is intentionally focused on 
 | v0.8.0 | UI / UX Finish |
 | v0.9.0 | Release Candidate / Regression |
 | v1.0.0 | Formal Release |
-| **v1.0.1** | **Consistent EN / JA header controls — current** |
+| v1.0.1 | Consistent EN / JA header controls |
+| v1.0.2 | Icon normalization |
+| v1.0.3 | Narrow viewer controls |
+| v1.0.4 | Modal scroll locking |
+| **v1.0.5** | **Persistence, PDF.js update, report compatibility — proposed** |
 
 See [APP_SPEC.md](APP_SPEC.md) for the product contract.
 
@@ -147,7 +151,7 @@ The first build downloads the exact dependency tarball pinned by the lock file, 
 
 | Library | Version | License | Purpose |
 | --- | ---: | --- | --- |
-| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF parsing/rendering, selectable text layer, PDF/view coordinates, bundled Japanese CMaps |
+| PDF.js (`pdfjs-dist`) | 6.5.438 | Apache-2.0 | PDF parsing/rendering, selectable text layer, PDF/view coordinates, bundled Japanese CMaps |
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

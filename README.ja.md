@@ -117,7 +117,11 @@ v1.0.0は初回正式リリースです。PDF編集全般へ広げず、レビ�
 | v0.8.0 | UI / UX Finish |
 | v0.9.0 | Release Candidate / Regression |
 | v1.0.0 | 正式リリース |
-| **v1.0.1** | **ヘッダーのEN / JA切り替え表記を統一 — 現在** |
+| v1.0.1 | ヘッダーのEN / JA切り替え表記を統一 |
+| v1.0.2 | アイコン統一 |
+| v1.0.3 | 狭い画面のPDF操作を改善 |
+| v1.0.4 | ダイアログ表示中の背景スクロールを停止 |
+| **v1.0.5** | **自動保存・PDF.js更新・レポート互換性 — 未リリース** |
 
 詳細は [APP_SPEC.md](APP_SPEC.md) を参照してください。
 
@@ -135,7 +139,7 @@ build-standalone.bat
 
 | Library | Version | License | 用途 |
 | --- | ---: | --- | --- |
-| PDF.js (`pdfjs-dist`) | 6.2.108 | Apache-2.0 | PDF解析・描画、Text Layer、PDF座標変換、日本語CMap |
+| PDF.js (`pdfjs-dist`) | 6.5.438 | Apache-2.0 | PDF解析・描画、Text Layer、PDF座標変換、日本語CMap |
 
 詳細は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。
 
