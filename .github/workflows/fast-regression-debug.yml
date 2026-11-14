@@ -1,0 +1,19 @@
+name: Temporary fast regression diagnostics
+on:
+  push:
+    branches: [fix/pdf-review-notes-stability-20261115]
+permissions:
+  contents: read
+jobs:
+  fast-node:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Run release readiness tests
+        run: node --test --test-reporter spec tests/release-readiness.test.cjs
+      - name: Run all source regression tests
+        run: node --test --test-reporter spec tests/*.test.cjs
