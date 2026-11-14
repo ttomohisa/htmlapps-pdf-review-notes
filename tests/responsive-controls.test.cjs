@@ -11,21 +11,20 @@ function rule(selector) {
 }
 // Source contracts guard the geometry root cause. Actual English/JA layout,
 // native Tab/zoom and input -> review -> export are checked in Chromium.
-test('narrow viewer moves zoom/fit controls onto their own shrinkable row', () => {
-  assert.match(rule('.viewer-toolbar'), /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto\s*;/);
-  assert.match(rule('.viewer-controls'), /grid-column:\s*1\s*\/\s*-1\s*;/);
-  assert.match(rule('.viewer-controls'), /grid-row:\s*2\s*;/);
-  assert.match(rule('.viewer-controls'), /min-width:\s*0\s*;/);
-  assert.match(rule('.area-toolbar-group'), /grid-column:\s*2\s*;/);
+test('mobile PDF toolbar aligns page/zoom and fit/area in two rows',()=>{
+ assert.match(rule('.viewer-toolbar'),/grid-template-rows:\s*44px\s+44px/);
+ assert.match(rule('.viewer-controls'),/display:\s*contents/);
+ assert.match(rule('.viewer-controls>.mode-switch'),/grid-row:\s*2/);
+ assert.match(rule('.viewer-controls>.zoom-stepper'),/grid-row:\s*1/);
+ assert.match(rule('.area-toolbar-group'),/grid-row:\s*2/);
+ assert.match(rule('.page-toolbar-group'),/grid-row:\s*1/);
+ assert.match(rule('.mode-switch .mode-button .mode-label-mobile'),/display:\s*inline/);
+ assert.match(rule('.zoom-stepper .zoom-value-button'),/min-width:\s*54px/);
 });
-test('narrow zoom and fit controls stay on a compact single row', () => {
-  assert.match(rule('.viewer-controls'), /flex-wrap:\s*nowrap\s*;/);
-  assert.match(rule('.mode-switch .mode-button span'), /display:\s*none\s*;?/);
-  assert.match(rule('.zoom-stepper .zoom-value-button'), /min-width:\s*64px\s*;/);
-  assert.match(rule('.viewer-toolbar'), /position:\s*relative\s*;/);
-  assert.match(rule('.viewer-toolbar'), /top:\s*auto\s*;/);
+test('empty review navigation hides on phone',()=>{
+ assert.match(rule('.review-navigation.is-empty'),/display:\s*none/);
+ assert.match(source,/classList\.toggle\('is-empty',reviews\.length===0\)/);
 });
-
 test('an open modal locks the underlying document scroll', () => {
   assert.match(css, /html:has\(dialog\[open\]\)\s*\{[^}]*overflow:\s*hidden/);
 });
