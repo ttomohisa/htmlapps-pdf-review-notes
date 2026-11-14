@@ -31,3 +31,7 @@ test('viewer and area render canvas allocation limits remain present',()=>{
 test('new PDF.js runs without external worker rendering or WASM downloads',()=>{
   assert.equal((source.match(/useWorkerFetch:false,useWasm:false,disableWorkerRendering:true/g)||[]).length,2);
 });
+
+test('oversized PDF remains excluded when export retries after a failure',()=>{
+  assert.match(source,/if\(!busy&&state\.file\?\.size>64\*1024\*1024\)els\.includePdf\.disabled=true/);
+});
