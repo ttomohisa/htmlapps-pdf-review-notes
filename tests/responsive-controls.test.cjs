@@ -61,7 +61,7 @@ test('mobile viewer fit icons retain accessible Japanese/English labels',()=>{
 });
 
 test('area review toggle preserves its SVG icon and pressed semantics',()=>{
- assert.match(source,/id="areaReviewModeButton"[^>]*<svg class="area-action-icon"/);
+ assert.match(source,/id="areaReviewModeButton"[^>]*>\s*<svg class="area-action-icon"/);
  assert.match(source,/areaModeButton\.querySelector\('span\[data-i18n\]'\)/);
  assert.match(source,/areaModeButton\.setAttribute\('aria-pressed',state\.areaMode\?'true':'false'\)/);
  assert.doesNotMatch(source,/areaModeButton\.textContent=state\.areaMode/);
